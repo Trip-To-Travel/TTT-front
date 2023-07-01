@@ -1,4 +1,5 @@
-import 'package:app/screens/calendar.dart';
+import 'package:app/screens/calendar/calendar.dart';
+import 'package:app/screens/calendar/calendarMain.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/mypage.dart';
 import 'package:app/screens/ranking.dart';
@@ -13,156 +14,94 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int currentTab = 0;
+  int _currentIndex = 0;
 
-  final List<Widget> screens = [
-    Calendar(),
+  final List<Widget> _pages = [
+    CalendarMain(),
     Map(),
     Ranking(),
     MyPage()
   ];
 
+  late List<GlobalKey<NavigatorState>> _navigatorKeyList;
+  late DateTime _lastPressedAt;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _navigatorKeyList = List.generate(_pages.length, (index) => GlobalKey<NavigatorState>());
+  }
+
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = Calendar();
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageStorage(
-        child: currentScreen,
-        bucket: bucket,
-      ),
-      bottomNavigationBar: BottomAppBar(
-        height: 100,
-        shape: CircularNotchedRectangle(),
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MaterialButton(
-                    minWidth: 0,
-                    onPressed: (){
-                      setState(() {
-                        currentScreen = Calendar();
-                        currentTab = 0;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.calendar_month,
-                          color: currentTab == 0 ? Color(0xff76BDFF) : Colors.grey,
-                        ),
-                        Text(
-                          "달력",
-                          style: TextStyle(
-                            color: currentTab == 0 ? Color(0xff76BDFF) : Colors.grey,
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
+    return WillPopScope(
+        child: Scaffold(
+            body: IndexedStack(
+              index: _currentIndex,
+              children: _pages.map((page) {
+                int index = _pages.indexOf(page);
+                return Navigator(
+                  key: _navigatorKeyList[index],
+                  onGenerateRoute: (_) {
+                    return MaterialPageRoute(builder: (context) => page);
+                  },
+                );
+              }).toList(),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              selectedItemColor: Color(0xff76BDFF),
+              unselectedItemColor: Colors.grey,
+              currentIndex: _currentIndex,
+              onTap: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.calendar_month,
+                  ),
+                  label: '달력',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.map_outlined,
+                  ),
+                  label: '지도',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.bar_chart,
+                  ),
+                  label: '랭킹',
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                        Icons.person
                     ),
-                  )
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MaterialButton(
-                    minWidth: 0,
-                    onPressed: (){
-                      setState(() {
-                        currentScreen = Map();
-                        currentTab = 1;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.map_outlined,
-                          color: currentTab == 1 ? Color(0xff76BDFF) : Colors.grey,
-                        ),
-                        Text(
-                          "지도",
-                          style: TextStyle(
-                            color: currentTab == 1 ? Color(0xff76BDFF) : Colors.grey,
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MaterialButton(
-                    minWidth: 0,
-                    onPressed: (){
-                      setState(() {
-                        currentScreen = Ranking();
-                        currentTab = 2;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.bar_chart,
-                          color: currentTab == 2 ? Color(0xff76BDFF) : Colors.grey,
-                        ),
-                        Text(
-                          "랭킹",
-                          style: TextStyle(
-                            color: currentTab == 2 ? Color(0xff76BDFF) : Colors.grey,
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MaterialButton(
-                    minWidth: 0,
-                    onPressed: (){
-                      setState(() {
-                        currentScreen = MyPage();
-                        currentTab = 3;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.person,
-                          color: currentTab == 3 ? Color(0xff76BDFF) : Colors.grey,
-                        ),
-                        Text(
-                          "마이페이지",
-                          style: TextStyle(
-                            color: currentTab == 3 ? Color(0xff76BDFF) : Colors.grey,
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ],
-          )
+                    label: '마이페이지'
+                ),
+              ],
+            ),
         ),
-      )
+      onWillPop: () async {
+        final now = DateTime.now();
+        if (now.difference(_lastPressedAt) > Duration(seconds: 2)) {
+          _lastPressedAt = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('한번 더 뒤로가기를 누를 시 종료됩니다'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          return false;
+        }
+        return !(await _navigatorKeyList[_currentIndex].currentState!.maybePop());
+      },
     );
   }
 }
