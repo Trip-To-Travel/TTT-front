@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
   ];
 
   late List<GlobalKey<NavigatorState>> _navigatorKeyList;
-  late DateTime _lastPressedAt;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -89,17 +89,6 @@ class _HomeState extends State<Home> {
             ),
         ),
       onWillPop: () async {
-        final now = DateTime.now();
-        if (now.difference(_lastPressedAt) > Duration(seconds: 2)) {
-          _lastPressedAt = now;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('한번 더 뒤로가기를 누를 시 종료됩니다'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-          return false;
-        }
         return !(await _navigatorKeyList[_currentIndex].currentState!.maybePop());
       },
     );
