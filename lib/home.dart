@@ -1,4 +1,3 @@
-import 'package:app/screens/calendar/calendar.dart';
 import 'package:app/screens/calendar/calendarMain.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/mypage.dart';
