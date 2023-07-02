@@ -257,7 +257,33 @@ class _MyPageState extends State<MyPage> {
                         ],
                       ),
                     ),
-                    
+                    Container( // Trip To Travel 소개하기!(친구초대) 카카오톡 메시지 api 같은거 쓰면 좋겠네요
+                      child: InkWell(
+                        onTap: () {
+                          print("친구초대");
+                        },
+                        child: Container(
+                          color: Color(0xff76BDFF),
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                  Icons.person_add_alt_sharp,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                " Trip To Travel 소개하기",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18
+                                ),
+                              )
+                            ],
+                          )
+                        ),
+                      ),
+                    )
                   ],
                 )
               ],
