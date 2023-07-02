@@ -226,7 +226,7 @@ class _MyPageState extends State<MyPage> {
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
                       child: Row( // 이용약관, 설정, 로그아웃
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
                               child: InkWell(
