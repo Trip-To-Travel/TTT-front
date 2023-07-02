@@ -81,10 +81,15 @@ class _MyPageState extends State<MyPage> {
                           onPressed: () { 
                             print("내 정보 페이지로 이동");
                           },
-                          child: Text(
-                            "내 정보 >",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.end,
+                          child: Row(
+                            children: [
+                              Text(
+                                "내 정보 ",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.end,
+                              ),
+                              Icon(Icons.arrow_forward_ios_sharp, size: 16,)
+                            ],
                           ),
                         ),
                       )
