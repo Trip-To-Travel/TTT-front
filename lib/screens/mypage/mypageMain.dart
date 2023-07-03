@@ -1,4 +1,7 @@
+import 'package:app/screens/mypage/myInfo.dart';
 import 'package:flutter/material.dart';
+
+import 'myInfo.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -82,7 +85,7 @@ class _MyPageState extends State<MyPage> {
                           Container(
                             child: TextButton(
                               onPressed: () {
-                                print("내 정보 페이지로 이동");
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyInfo()));
                               },
                               child: Row(
                                 children: [
