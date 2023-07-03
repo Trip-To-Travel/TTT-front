@@ -82,7 +82,7 @@ class BtnUpdate extends StatelessWidget {
                 "변경",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   color: Colors.white,
                 ),
               )
