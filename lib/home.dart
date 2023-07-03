@@ -1,6 +1,6 @@
 import 'package:app/screens/calendar/calendarMain.dart';
 import 'package:app/screens/map.dart';
-import 'package:app/screens/mypage.dart';
+import 'package:app/screens/mypage/mypageMain.dart';
 import 'package:app/screens/ranking.dart';
 import 'package:flutter/material.dart';
 
