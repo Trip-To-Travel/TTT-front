@@ -23,10 +23,11 @@ class UpdatePassword extends StatelessWidget {
               child: const TextField(
                 obscureText: true,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(),
                   enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xff76BDFF),
-                      )
+                    borderSide: BorderSide(
+                      color: Color(0xff76BDFF),
+                    )
                   ),
                   labelText: "비밀번호"
                 ),
@@ -37,12 +38,13 @@ class UpdatePassword extends StatelessWidget {
               child: const TextField(
                 obscureText: true,
                 decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xff76BDFF),
-                      )
-                    ),
-                    labelText: "비밀번호 확인"
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xff76BDFF),
+                    )
+                  ),
+                  labelText: "비밀번호 확인"
                 ),
               ),
             ),
