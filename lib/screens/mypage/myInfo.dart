@@ -12,85 +12,77 @@ class MyInfo extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
           ),
-          title: Text("내 정보", style: TextStyle(color: Colors.black, fontSize: 16),),
+          title: const Text("내 정보", style: TextStyle(color: Colors.black, fontSize: 16),),
         ),
         body: SafeArea(
-          child: Container(
-              child: Column(
-                children: [
-                  Container( // 현재의 '내 정보'들: 아이디, 닉네임, 이메일
-                    padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-                    color: Color(0xffebebeb),
-                    child: Column(
-                      children: [
-                        Row( // 아이디
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("아이디"),
-                            Text("testuser"),
-                          ],
-                        ),
-                        Row( // 닉네임
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("닉네임"),
-                            Text("티티티닉네임"),
-                          ],
-                        ),
-                        Row( // 이메일
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("이메일"),
-                            Text("email@email.com"),
-                          ],
-                        ),
+          child: Column(
+            children: [
+              Container( // 현재의 '내 정보'들: 아이디, 닉네임, 이메일
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+                color: const Color(0xffebebeb),
+                child: Column(
+                  children: [
+                    Row( // 아이디
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text("아이디"),
+                        Text("testuser"),
                       ],
+                    ),
+                    Row( // 닉네임
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text("닉네임"),
+                        Text("티티티닉네임"),
+                      ],
+                    ),
+                    Row( // 이메일
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text("이메일"),
+                        Text("email@email.com"),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Column( // 메뉴
+                children: [
+                  InkWell( // 비밀번호 변경
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdatePassword()));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text("비밀번호 변경"),
+                          Icon(Icons.arrow_forward_ios_sharp, size: 16)
+                        ],
+                      ),
                     ),
                   ),
-                  Container( // 메뉴
-                    child: Column(
-                      children: [
-                        Container( // 비밀번호 변경
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => UpdatePassword()));
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("비밀번호 변경"),
-                                  Icon(Icons.arrow_forward_ios_sharp, size: 16)
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container( // 회원정보 변경
-                          child: InkWell(
-                            onTap: () {
-                              print("회원정보 변경 페이지로 이동");
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("회원정보 변경"),
-                                  Icon(Icons.arrow_forward_ios_sharp, size: 16)
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                  InkWell( // 회원정보 변경
+                    onTap: () {
+                      print("회원정보 변경 페이지로 이동");
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text("회원정보 변경"),
+                          Icon(Icons.arrow_forward_ios_sharp, size: 16)
+                        ],
+                      ),
                     ),
-                  )
+                  ),
                 ],
               )
+            ],
           ),
         )
     );
