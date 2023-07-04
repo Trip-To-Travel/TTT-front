@@ -1,4 +1,5 @@
 import 'package:app/screens/mypage/updatePassword.dart';
+import 'package:app/screens/mypage/updateUserInfo.dart';
 import 'package:flutter/material.dart';
 
 class MyInfo extends StatelessWidget {
@@ -67,7 +68,7 @@ class MyInfo extends StatelessWidget {
                   ),
                   InkWell( // 회원정보 변경
                     onTap: () {
-                      print("회원정보 변경 페이지로 이동");
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdateUserInfo()));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(20),
