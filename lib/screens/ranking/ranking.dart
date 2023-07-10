@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app/screens/ranking/themeRanking.dart';
 import 'package:flutter/material.dart';
 
 class Ranking extends StatefulWidget {
@@ -13,26 +14,32 @@ class _RankingState extends State<Ranking> {
 
   dynamic itemList = [
     {
+      "themeCode": 0,
       "image" : "assets/images/mockimg1.jpg",
       "theme" : "전체",
     },
     {
+      "themeCode": 1,
       "image" : "assets/images/mockimg2.jpg",
       "theme" : "카페",
     },
     {
+      "themeCode": 2,
       "image" : "assets/images/mockimg3.jpg",
       "theme" : "익스트림",
     },
     {
+      "themeCode": 3,
       "image" : "assets/images/mockimg3.jpg",
       "theme" : "쏼라쏼라",
     },
     {
+      "themeCode": 4,
       "image" : "assets/images/mockimg2.jpg",
       "theme" : "저쩌구",
     },
     {
+      "themeCode": 5,
       "image" : "assets/images/mockimg1.jpg",
       "theme" : "어쩌그",
     },
@@ -178,32 +185,41 @@ class _RankingState extends State<Ranking> {
               // 화면에 표시될 위젯을 설정
               delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return Container(
-                    padding: EdgeInsets.all(0.5),
-                    decoration: BoxDecoration(
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => themeRanking(
+                        themeCode: itemList[index]["themeCode"],
+                        image: itemList[index]["image"],
+                        theme: itemList[index]["theme"]))
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(0.5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              image: AssetImage(itemList[index]["image"]),
+                              fit: BoxFit.cover)
+                      ),
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: AssetImage(itemList[index]["image"]),
-                            fit: BoxFit.cover)
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                itemList[index]['theme'],
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  itemList[index]['theme'],
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
