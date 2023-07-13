@@ -1,4 +1,4 @@
-import 'package:app/home.dart';
+import 'package:app/login.dart';
 import 'package:flutter/material.dart';
 
 
@@ -25,7 +25,7 @@ class _StartingState extends State<Starting> {
         _state = false;
       });
       _getThingsOnStartup(2000).then((value) => {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()))
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()))
       });
     });
     super.initState();
