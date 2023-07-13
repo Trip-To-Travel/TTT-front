@@ -1,3 +1,4 @@
+import 'package:app/screens/diary/viewDiary.dart';
 import 'package:flutter/material.dart';
 
 class Calendar extends StatefulWidget {
@@ -76,32 +77,36 @@ class _CalendarState extends State<Calendar> {
                         itemCount: itemList.length,
                         itemBuilder: (BuildContext context, int index) {
                           return SizedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                    height: double.infinity,
-                                    child: Image(
-                                      image: AssetImage(itemList[index]["image"]),
-                                      fit: BoxFit.fill,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDiary()));},
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                      height: double.infinity,
+                                      child: Image(
+                                        image: AssetImage(itemList[index]["image"]),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    )
+                                  ),
+                                  SizedBox(
+                                    width: idealWidth * 160,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(itemList[index]["date"]),
+                                        Text(itemList[index]["detail"]),
+                                      ],
                                     ),
                                   )
-                                ),
-                                SizedBox(
-                                  width: idealWidth * 160,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(itemList[index]["date"]),
-                                      Text(itemList[index]["detail"]),
-                                    ],
-                                  ),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         }
