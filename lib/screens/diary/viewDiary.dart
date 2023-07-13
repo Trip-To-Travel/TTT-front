@@ -16,6 +16,18 @@ class _ViewDiaryState extends State<ViewDiary> {
     final idealWidth = deviceWidth / 375;
     final idealHeight = deviceHeight / 667;
 
+    dynamic itemList = [
+      {
+        "image" : "assets/images/mockimg1.jpg",
+      },
+      {
+        "image" : "assets/images/mockimg2.jpg",
+      },
+      {
+        "image" : "assets/images/mockimg3.jpg",
+      },
+    ];
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -91,7 +103,7 @@ class _ViewDiaryState extends State<ViewDiary> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: 10,
+                    itemCount: itemList.length,
                     itemBuilder: (context, index) {
                       return Container(
                         margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
@@ -103,7 +115,7 @@ class _ViewDiaryState extends State<ViewDiary> {
                             ),
                             elevation: 5,
                             child: Image(
-                              image: AssetImage("assets/images/mockimg1.jpg"),
+                              image: AssetImage(itemList[index]["image"]),
                               fit: BoxFit.fill,
                             )
                         ),
