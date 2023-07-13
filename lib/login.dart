@@ -38,7 +38,7 @@ class _LoginState extends State<Login> {
                     width: 35.0,
                   ),
                   Image.asset(
-                    'images/img.png',
+                    'assets/images/img.png',
                     width: 150,
                     height: 150,
                     fit: BoxFit.cover,
@@ -116,7 +116,7 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            'images/google.png',
+                            'assets/images/google.png',
                             width: 18,
                             height: 18,
                             fit: BoxFit.cover,
@@ -162,7 +162,7 @@ class _LoginState extends State<Login> {
                           Opacity(
                             opacity: 0.9,
                             child: Image.asset(
-                              'images/kakao.png',
+                              'assets/images/kakao.png',
                               width: 18,
                               height: 18,
                               fit: BoxFit.cover,
@@ -205,7 +205,7 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            'images/google.png',
+                            'assets/images/google.png',
                             width: 18,
                             height: 18,
                             fit: BoxFit.cover,
