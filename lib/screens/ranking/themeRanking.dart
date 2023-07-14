@@ -117,47 +117,91 @@ class _ThemeRankingState extends State<ThemeRanking> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 1,
                 crossAxisSpacing: 10.0,
-                childAspectRatio: 2 / 1, //item 의 가로 1, 세로 1 의 비율
+                childAspectRatio: 5 / 3, //item 의 가로 3, 세로 2 의 비율
               ),
               // 화면에 표시될 위젯을 설정
               delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                   return Column(
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            child: Text(
-                              "${index+1}".padLeft(2, '0'),
-                            ),
-                          ),
-                          Container(
-                            width: idealWidth * 80,
-                            height: idealWidth * 80,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(itemList[index]["image"]),
-                                fit: BoxFit.cover
-                              )
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              children: [
-                                Text( // 장소 명
-                                  itemList[index]["place_name"],
+                      Flexible(
+                        flex: 4,
+                        child: Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 32),
+                                width: double.infinity,
+                                height: double.infinity,
+                                child: FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Text(
+                                    "${index+1}".padLeft(2, '0'),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w100
+                                    ),
+                                  ),
                                 ),
-                                Text( // 주소
-                                  itemList[index]["road_address_name"],
-                                )
-                              ],
+                              ),
                             ),
-                          )
-                        ],
+                            Flexible(
+                              flex: 7,
+                              child: Column(
+                                children: [
+                                  const Spacer(flex: 1,),
+                                  Flexible(
+                                    flex: 2,
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          flex: 3,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage(itemList[index]["image"]),
+                                                    fit: BoxFit.cover
+                                                )
+                                            ),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 4,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            child: Column(
+                                              children: [
+                                                Text( // 장소 명
+                                                  itemList[index]["place_name"],
+                                                ),
+                                                Text( // 주소
+                                                  itemList[index]["road_address_name"],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      Container(
-                        child: Text(
-                          "${itemList[index]["number_of_visitors"]} 명이 이 장소에 방문했어요."
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            "${itemList[index]["number_of_visitors"]} 명이 이 장소에 방문했어요."
+                          ),
                         ),
                       )
                     ],
