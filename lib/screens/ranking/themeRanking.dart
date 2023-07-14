@@ -18,6 +18,31 @@ class themeRanking extends StatefulWidget {
 }
 
 class _themeRankingState extends State<themeRanking> {
+
+  dynamic itemList = [ // todo: 추후 query(select~ sort~ limit=20~) 실행 결과가 여기에 담기도록 하면 되겠죠
+    {
+      "category_group_code": "0",
+      "image" : "assets/images/mockimg1.jpg",
+      "place_name": "스너글",
+      "road_address_name": "충북 청주시 서원구 성봉로242번길 51",
+      "number_of_visitors": 134,
+    },
+    {
+      "category_group_code": "1",
+      "image" : "assets/images/mockimg2.jpg",
+      "place_name": "이달의 커피",
+      "road_address_name": "충북 청주시 서원구 성봉로242번길 28",
+      "number_of_visitors": 90,
+    },
+    {
+      "category_group_code": "2",
+      "image" : "assets/images/mockimg3.jpg",
+      "place_name": "아르떼커피 충북대정문점",
+      "road_address_name": "충북 청주시 흥덕구 충대로 2",
+      "number_of_visitors": 78,
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -37,7 +62,7 @@ class _themeRankingState extends State<themeRanking> {
       ),
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
+          SliverToBoxAdapter( // 타이틀
             child: Container(
               color: Colors.black,
               child: Container(
@@ -51,7 +76,7 @@ class _themeRankingState extends State<themeRanking> {
                   )
                 ),
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(16, 32, 16, 32),
+                  padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,22 +111,63 @@ class _themeRankingState extends State<themeRanking> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              margin: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: idealHeight * 260,
-                    child: Text(
-                      "반가워용"
-                    ),
-                  )
-                ],
+          SliverPadding(
+            padding: EdgeInsets.all(8),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                crossAxisSpacing: 10.0,
+                childAspectRatio: 2 / 1, //item 의 가로 1, 세로 1 의 비율
+              ),
+              // 화면에 표시될 위젯을 설정
+              delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            child: Text(
+                              "${index+1}".padLeft(2, '0'),
+                            ),
+                          ),
+                          Container(
+                            width: idealWidth * 80,
+                            height: idealWidth * 80,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(itemList[index]["image"]),
+                                fit: BoxFit.cover
+                              )
+                            ),
+                          ),
+                          Container(
+                            child: Column(
+                              children: [
+                                Text( // 장소 명
+                                  itemList[index]["place_name"],
+                                ),
+                                Text( // 주소
+                                  itemList[index]["road_address_name"],
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      Container(
+                        child: Text(
+                          "${itemList[index]["number_of_visitors"]} 명이 이 장소에 방문했어요."
+                        ),
+                      )
+                    ],
+                  );
+                },
+                childCount: itemList.length,
               ),
             ),
-          ),
+
+          )
         ],
       ),
     );
