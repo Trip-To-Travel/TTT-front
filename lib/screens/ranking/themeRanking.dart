@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class themeRanking extends StatefulWidget {
-  const themeRanking({
+class ThemeRanking extends StatefulWidget {
+  const ThemeRanking({
     required this.themeCode,
     required this.image,
     required this.theme,
@@ -14,10 +14,10 @@ class themeRanking extends StatefulWidget {
   final String theme;
 
   @override
-  State<themeRanking> createState() => _themeRankingState();
+  State<ThemeRanking> createState() => _ThemeRankingState();
 }
 
-class _themeRankingState extends State<themeRanking> {
+class _ThemeRankingState extends State<ThemeRanking> {
 
   dynamic itemList = [ // todo: 추후 query(select~ sort~ limit=20~) 실행 결과가 여기에 담기도록 하면 되겠죠
     {
