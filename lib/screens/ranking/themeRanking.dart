@@ -24,20 +24,23 @@ class _ThemeRankingState extends State<ThemeRanking> {
       "category_group_code": "0",
       "image" : "assets/images/mockimg1.jpg",
       "place_name": "스너글",
-      "road_address_name": "충북 청주시 서원구 성봉로242번길 51",
+      "address_name": "개신동 263-15",
+      "road_address_name": "충북 청주시 서원구 성봉로 242번길 51",
       "number_of_visitors": 134,
     },
     {
       "category_group_code": "1",
       "image" : "assets/images/mockimg2.jpg",
       "place_name": "이달의 커피",
-      "road_address_name": "충북 청주시 서원구 성봉로242번길 28",
+      "address_name": "개신동 496-16",
+      "road_address_name": "충북 청주시 서원구 성봉로 242번길 28",
       "number_of_visitors": 90,
     },
     {
       "category_group_code": "2",
       "image" : "assets/images/mockimg3.jpg",
-      "place_name": "아르떼커피 충북대정문점",
+      "place_name": "아르떼커피 충대정문점",
+      "address_name": "복대동 872-15",
       "road_address_name": "충북 청주시 흥덕구 충대로 2",
       "number_of_visitors": 78,
     },
@@ -100,7 +103,7 @@ class _ThemeRankingState extends State<ThemeRanking> {
                         ),
                         const Spacer(flex: 1,),
                         Text(
-                          "트래블러가 많이 찾은 \"${widget.theme}\" 스무 곳을 소개합니다.",
+                          "트래블러가 많이 찾은 \"${widget.theme}\" 테마 여행지 스무 곳을 소개합니다.",
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -111,7 +114,7 @@ class _ThemeRankingState extends State<ThemeRanking> {
               ),
             ),
           ),
-          SliverPadding(
+          SliverPadding( // todo: 여기 InkWell 씌워서, 클릭 시 해당 장소에 대한 정보 나타내도록 하는 건 어떨까?
             padding: EdgeInsets.all(8),
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -131,7 +134,7 @@ class _ThemeRankingState extends State<ThemeRanking> {
                             Flexible(
                               flex: 1,
                               child: Container(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 32),
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
                                 width: double.infinity,
                                 height: double.infinity,
                                 child: FittedBox(
@@ -139,27 +142,27 @@ class _ThemeRankingState extends State<ThemeRanking> {
                                   child: Text(
                                     "${index+1}".padLeft(2, '0'),
                                     style: const TextStyle(
-                                      fontWeight: FontWeight.w100
+                                      color: Colors.black12,
+                                      fontWeight: FontWeight.w100,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                             Flexible(
-                              flex: 7,
+                              flex: 8,
                               child: Column(
                                 children: [
                                   const Spacer(flex: 1,),
                                   Flexible(
-                                    flex: 2,
+                                    flex: 3,
                                     child: Row(
+                                      mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Flexible(
                                           flex: 3,
                                           child: Container(
                                             padding: const EdgeInsets.all(8),
-                                            width: double.infinity,
-                                            height: double.infinity,
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: AssetImage(itemList[index]["image"]),
@@ -171,16 +174,77 @@ class _ThemeRankingState extends State<ThemeRanking> {
                                         Flexible(
                                           flex: 4,
                                           child: Container(
-                                            padding: const EdgeInsets.all(8),
-                                            width: double.infinity,
-                                            height: double.infinity,
+                                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                             child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text( // 장소 명
-                                                  itemList[index]["place_name"],
+                                                Flexible(
+                                                  child: Text( // 장소 명
+                                                    itemList[index]["place_name"],
+                                                    textAlign: TextAlign.start,
+                                                    style: const TextStyle(
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
                                                 ),
-                                                Text( // 주소
-                                                  itemList[index]["road_address_name"],
+                                                Container(
+                                                  margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                                        child: const Icon(
+                                                          Icons.pin_drop_sharp, size: 16,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      Flexible(
+                                                        child: Text( // 주소
+                                                          itemList[index]["road_address_name"],
+                                                          textAlign: TextAlign.justify,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                                        padding: const EdgeInsets.all(1),
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                            color: Colors.grey,
+                                                            width: 1,
+                                                          )
+                                                        ),
+                                                        child: const Text(
+                                                          "지번",
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        )
+                                                      ),
+                                                      Flexible(
+                                                        child: Text( // 지번
+                                                          itemList[index]["address_name"],
+                                                          textAlign: TextAlign.justify,
+                                                          style: const TextStyle(
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 )
                                               ],
                                             ),
@@ -199,8 +263,26 @@ class _ThemeRankingState extends State<ThemeRanking> {
                         flex: 1,
                         child: Container(
                           padding: const EdgeInsets.all(8),
-                          child: Text(
-                            "${itemList[index]["number_of_visitors"]} 명이 이 장소에 방문했어요."
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                child: const Icon(
+                                  Icons.remove_red_eye_sharp, size: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                "${itemList[index]["number_of_visitors"]}",
+                                style: const TextStyle(
+                                  color: Color(0xff76BDFF),
+                                ),
+                              ),
+                              const Text(
+                                "명이 이 장소에 방문했어요."
+                              )
+                            ],
                           ),
                         ),
                       )
