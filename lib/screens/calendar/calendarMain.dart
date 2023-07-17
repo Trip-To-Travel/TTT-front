@@ -1,6 +1,6 @@
-import 'package:app/screens/calendar/calendar.dart';
 import 'package:app/screens/diary/writeDiary.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarMain extends StatefulWidget {
   const CalendarMain({super.key});
@@ -10,16 +10,141 @@ class CalendarMain extends StatefulWidget {
 }
 
 class _CalendarMainState extends State<CalendarMain> {
+  Map<DateTime, String> photoMap = {};
+
+  List<String> _selectedImages = [];
+  bool _showTodayButton = false;
+
+
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _selectedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
+
+  String _selectedImage = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedImages = _getImagesForSelectedDate(_selectedDay);
+  }
+
+
+  dynamic itemList = [
+    {
+      "image" : "assets/images/mockimg1.jpg",
+      "date" : "2023-07-01",
+      "detail" : "내가 어쩌고 저쩌고",
+    },
+    {
+      "image" : "assets/images/mockimg2.jpg",
+      "date" : "2023-07-18",
+      "detail" : "내가 어쩌고 저쩌고",
+    },
+    {
+      "image" : "assets/images/mockimg3.jpg",
+      "date" : "2023-07-20",
+      "detail" : "내가 어쩌고 저쩌고",
+    },
+  ];
+
+  String _getImageForSelectedDate(DateTime selectedDate) {
+    final formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}"; // yyyy.MM.dd 형식으로 변경
+    final matchingItems = itemList.where((item) => item['date'] == formattedDate).toList();
+    print(formattedDate);
+    print(itemList[0]["date"]);
+    if (matchingItems.isNotEmpty) {
+      return matchingItems[0]['image'];
+    } else {
+      return "";
+    }
+  }
+
+  List<String> _getImagesForSelectedDate(DateTime selectedDate) {
+    final formattedDate = selectedDate.toString().split(" ")[0]; // yyyy-MM-dd 형식으로 변경
+    final matchingItems = itemList.where((item) => item['date'] == formattedDate).toList();
+    if (matchingItems.isNotEmpty) {
+      return matchingItems.map((item) => item['image']).toList();
+    } else {
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height;
+    final idealWidth = deviceWidth / 375;
+    final idealHeight = deviceHeight / 667;
+
     return Scaffold(
-      body: Center(
-          child: TextButton(
-            onPressed: () => {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Calendar()))
-            },
-            child: new Text('No'),
-          )
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                TableCalendar(
+                  firstDay: DateTime.utc(2000, 1, 1),
+                  lastDay: DateTime.utc(2030, 12, 31),
+                  focusedDay: _focusedDay,
+                  calendarFormat: _calendarFormat,
+                  selectedDayPredicate: (day) {
+                    return isSameDay(_selectedDay, day);
+                  },
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      if(_selectedDay != DateTime.now()) _showTodayButton = true;
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                      _selectedImage = _getImageForSelectedDate(selectedDay);
+                    });
+                  },
+                  onPageChanged: (focusedDay) {
+                    setState(() {
+                      _focusedDay = focusedDay;
+                      _selectedImage = _getImageForSelectedDate(_selectedDay);
+                    });
+                  },
+                ),
+                SizedBox(height: 20),
+                if (_selectedImage.isNotEmpty)
+                  Image.asset(
+                    _selectedImage,
+                    width: 200,
+                    height: 200,
+                  ),
+
+              ],
+            ),
+
+            if (_showTodayButton && _selectedDay != DateTime.now())
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all<Size>(Size(85, 30)), // 버튼의 크기를 조정
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _selectedDay = DateTime.now();
+                        _focusedDay = DateTime.now();
+                        _selectedImages = _getImagesForSelectedDate(DateTime.now());
+                        _selectedImage = _getImageForSelectedDate(DateTime.now()); // 오늘 날짜에 맞는 사진 할당
+                        _showTodayButton = false;
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.chevron_left),
+                        Text('오늘')
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ]
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

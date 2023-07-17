@@ -187,7 +187,7 @@ class _RankingState extends State<Ranking> {
                     (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => themeRanking(
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ThemeRanking(
                         themeCode: itemList[index]["themeCode"],
                         image: itemList[index]["image"],
                         theme: itemList[index]["theme"]))
