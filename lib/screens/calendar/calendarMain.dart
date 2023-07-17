@@ -46,6 +46,11 @@ class _CalendarMainState extends State<CalendarMain> {
     },
   ];
 
+  String _getWeekDay(DateTime selectedDate) {
+    String weekday = ['월', '화', '수', '목', '금', '토', '일'][DateTime.now().weekday - 1];
+    return weekday;
+  }
+
   String _getImageForSelectedDate(DateTime selectedDate) {
     final formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}"; // yyyy.MM.dd 형식으로 변경
     final matchingItems = itemList.where((item) => item['date'] == formattedDate).toList();
@@ -164,7 +169,7 @@ class _CalendarMainState extends State<CalendarMain> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: "${_selectedDay.toString().split(" ")[0]} (${_getWeekDay(_selectedDay)})",)));
         },
         backgroundColor: Color(0xff76BDFF),
         shape: RoundedRectangleBorder(
@@ -172,7 +177,6 @@ class _CalendarMainState extends State<CalendarMain> {
         ),
         child: const Icon(Icons.mode_edit_outline_outlined, color: Colors.white,),
       ),
-
     );
   }
 }
