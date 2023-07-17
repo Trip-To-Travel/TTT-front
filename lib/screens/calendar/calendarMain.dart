@@ -16,7 +16,6 @@ class _CalendarMainState extends State<CalendarMain> {
   bool _showTodayButton = false;
 
 
-  CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 
@@ -63,7 +62,7 @@ class _CalendarMainState extends State<CalendarMain> {
     final formattedDate = selectedDate.toString().split(" ")[0]; // yyyy-MM-dd 형식으로 변경
     final matchingItems = itemList.where((item) => item['date'] == formattedDate).toList();
     if (matchingItems.isNotEmpty) {
-      return matchingItems.map((item) => item['image']).toList();
+      return matchingItems.map<String>((item) => item['image'] as String).toList();
     } else {
       return [];
     }
@@ -86,22 +85,39 @@ class _CalendarMainState extends State<CalendarMain> {
                   firstDay: DateTime.utc(2000, 1, 1),
                   lastDay: DateTime.utc(2030, 12, 31),
                   focusedDay: _focusedDay,
-                  calendarFormat: _calendarFormat,
+                  availableCalendarFormats: const {
+                    CalendarFormat.month: 'Month',
+                  },
                   selectedDayPredicate: (day) {
                     return isSameDay(_selectedDay, day);
                   },
                   onDaySelected: (selectedDay, focusedDay) {
                     setState(() {
-                      if(_selectedDay != DateTime.now()) _showTodayButton = true;
                       _selectedDay = selectedDay;
-                      _focusedDay = focusedDay;
                       _selectedImage = _getImageForSelectedDate(selectedDay);
+                      if (_selectedDay.toString().split(" ")[0] == DateTime.now().toString().split(" ")[0]) {
+                        _showTodayButton = false;
+                      } else {
+                        _showTodayButton = true;
+                      }
                     });
                   },
                   onPageChanged: (focusedDay) {
                     setState(() {
-                      _focusedDay = focusedDay;
+                      if(focusedDay.month == DateTime.now().month) {
+                        _selectedDay = DateTime.now();
+                        _focusedDay = DateTime.now();
+                      } else {
+                        _selectedDay = focusedDay;
+                        _focusedDay = focusedDay;
+                      }
+
                       _selectedImage = _getImageForSelectedDate(_selectedDay);
+                      if (_focusedDay.toString().split(" ")[0] == DateTime.now().toString().split(" ")[0]) {
+                        _showTodayButton = false;
+                      } else if (_showTodayButton == false) {
+                        _showTodayButton = true;
+                      }
                     });
                   },
                 ),
@@ -127,11 +143,11 @@ class _CalendarMainState extends State<CalendarMain> {
                     ),
                     onPressed: () {
                       setState(() {
+                        _showTodayButton = false;
                         _selectedDay = DateTime.now();
                         _focusedDay = DateTime.now();
                         _selectedImages = _getImagesForSelectedDate(DateTime.now());
                         _selectedImage = _getImageForSelectedDate(DateTime.now()); // 오늘 날짜에 맞는 사진 할당
-                        _showTodayButton = false;
                       });
                     },
                     child: Row(
