@@ -1,6 +1,11 @@
 import 'package:app/screens/diary/writeDiary.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+<<<<<<< HEAD
+=======
+
+import '../diary/viewDiary.dart';
+>>>>>>> 4537f2e673d6b95a0823bfa034418de4fa895459
 
 class CalendarMain extends StatefulWidget {
   const CalendarMain({super.key});
@@ -46,11 +51,14 @@ class _CalendarMainState extends State<CalendarMain> {
     },
   ];
 
+  String _getWeekDay(DateTime selectedDate) {
+    String weekday = ['월', '화', '수', '목', '금', '토', '일'][DateTime.now().weekday - 1];
+    return weekday;
+  }
+
   String _getImageForSelectedDate(DateTime selectedDate) {
-    final formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}"; // yyyy.MM.dd 형식으로 변경
+    final formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
     final matchingItems = itemList.where((item) => item['date'] == formattedDate).toList();
-    print(formattedDate);
-    print(itemList[0]["date"]);
     if (matchingItems.isNotEmpty) {
       return matchingItems[0]['image'];
     } else {
@@ -59,7 +67,7 @@ class _CalendarMainState extends State<CalendarMain> {
   }
 
   List<String> _getImagesForSelectedDate(DateTime selectedDate) {
-    final formattedDate = selectedDate.toString().split(" ")[0]; // yyyy-MM-dd 형식으로 변경
+    final formattedDate = selectedDate.toString().split(" ")[0];
     final matchingItems = itemList.where((item) => item['date'] == formattedDate).toList();
     if (matchingItems.isNotEmpty) {
       return matchingItems.map<String>((item) => item['image'] as String).toList();
@@ -121,17 +129,88 @@ class _CalendarMainState extends State<CalendarMain> {
                     });
                   },
                 ),
-                SizedBox(height: 20),
-                if (_selectedImage.isNotEmpty)
-                  Image.asset(
-                    _selectedImage,
-                    width: 200,
-                    height: 200,
-                  ),
 
+                SizedBox(
+                  height: 20,
+                ),
+
+                // 선택할때 다이어리 미리 보기 뜨는 곳.
+                if (_selectedImage.isNotEmpty)
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDiary()));},
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(9, 0, 9, 0),
+                      child: Container(
+                        height: idealHeight * 100,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.grey,
+                              style: BorderStyle.solid,
+                              width: 1
+                          )
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.asset(
+                                  _selectedImage,
+                                  fit: BoxFit.fill,
+                                  width: idealWidth * 90,
+                                  height: idealHeight * 90,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text("2023-7-18",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text("오늘은 기분 좋은 하루~",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14
+                                      ),
+                                    ),
+                                    Text("오늘은 어쩌구 저쩌구 해서 기분이 매우 좋은 하루이다~오늘은 어쩌구 저쩌구 해서 기분이 매우 좋은 하루이다~오늘은 어쩌구 저쩌구 해서 기분이 매우 좋은 하루이다~오늘은 어쩌구 저쩌구 해서 기분이 매우 좋은 하루이다~오늘은 어쩌구 저쩌구 해서 기분이 매우 좋은 하루이다~",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 3,
+                                    ),
+                                  ],
+                                ),
+                              )
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
 
+            // 오늘로 돌아오는 버튼
             if (_showTodayButton && _selectedDay != DateTime.now())
               Align(
                 alignment: Alignment.bottomCenter,
@@ -139,7 +218,7 @@ class _CalendarMainState extends State<CalendarMain> {
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all<Size>(Size(85, 30)), // 버튼의 크기를 조정
+                      fixedSize: MaterialStateProperty.all<Size>(Size(85, 30)),
                     ),
                     onPressed: () {
                       setState(() {
@@ -147,7 +226,7 @@ class _CalendarMainState extends State<CalendarMain> {
                         _selectedDay = DateTime.now();
                         _focusedDay = DateTime.now();
                         _selectedImages = _getImagesForSelectedDate(DateTime.now());
-                        _selectedImage = _getImageForSelectedDate(DateTime.now()); // 오늘 날짜에 맞는 사진 할당
+                        _selectedImage = _getImageForSelectedDate(DateTime.now());
                       });
                     },
                     child: Row(
@@ -164,7 +243,7 @@ class _CalendarMainState extends State<CalendarMain> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: "${_selectedDay.toString().split(" ")[0]} (${_getWeekDay(_selectedDay)})",)));
         },
         backgroundColor: Color(0xff76BDFF),
         shape: RoundedRectangleBorder(
@@ -172,7 +251,6 @@ class _CalendarMainState extends State<CalendarMain> {
         ),
         child: const Icon(Icons.mode_edit_outline_outlined, color: Colors.white,),
       ),
-
     );
   }
 }
