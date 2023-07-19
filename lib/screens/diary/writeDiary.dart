@@ -121,7 +121,7 @@ class _WriteDiaryState extends State<WriteDiary> {
                   cursorColor: Color(0xff76BDFF),
                 ),
               ),
-              if (_loading) // 로딩 중일 때 로딩 표시를 표시합니다.
+              if (_loading)
                 CircularProgressIndicator(),
               Expanded(
                 child: GridView.count(
