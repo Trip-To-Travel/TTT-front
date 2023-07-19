@@ -1,11 +1,7 @@
 import 'package:app/screens/diary/writeDiary.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-<<<<<<< HEAD
-=======
-
 import '../diary/viewDiary.dart';
->>>>>>> 4537f2e673d6b95a0823bfa034418de4fa895459
 
 class CalendarMain extends StatefulWidget {
   const CalendarMain({super.key});
