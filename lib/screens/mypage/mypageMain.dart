@@ -1,4 +1,5 @@
 import 'package:app/screens/mypage/myInfo.dart';
+import 'package:app/screens/mypage/yearEnd.dart';
 import 'package:flutter/material.dart';
 
 class MyPage extends StatefulWidget {
@@ -109,7 +110,7 @@ class _MyPageState extends State<MyPage> {
                                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                                   child: InkWell(
                                     onTap: () {
-                                      print("연말정산 페이지로 이동");
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const YearEnd()));
                                     },
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,7 +138,7 @@ class _MyPageState extends State<MyPage> {
                                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                                   child: InkWell(
                                     onTap: () {
-                                      print("공지사항 페이지로 이동");
+                                      print("공지사항 페이지로 이동"); // todo
                                     },
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,7 +166,7 @@ class _MyPageState extends State<MyPage> {
                                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                                   child: InkWell(
                                     onTap: () {
-                                      print("자주하는 질문 페이지로 이동");
+                                      print("자주하는 질문 페이지로 이동"); // todo
                                     },
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,7 +194,7 @@ class _MyPageState extends State<MyPage> {
                                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                                   child: InkWell(
                                     onTap: () {
-                                      print("1:1 문의 페이지로 이동");
+                                      print("1:1 문의 페이지로 이동"); // todo
                                     },
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,21 +234,21 @@ class _MyPageState extends State<MyPage> {
                           children: [
                             InkWell(
                               onTap: () {
-                                print("이용약관 페이지로 이동");
+                                print("이용약관 페이지로 이동"); // todo
                               },
                               child: const Text("이용약관"),
                             ),
                             const Text("|", style: TextStyle(color: Colors.black12),),
                             InkWell(
                               onTap: () {
-                                print("설정 페이지로 이동");
+                                print("설정 페이지로 이동"); // todo
                               },
                               child: const Text("설정"),
                             ),
                             const Text("|", style: TextStyle(color: Colors.black12),),
                             InkWell(
                               onTap: () {
-                                print("로그아웃 되기");
+                                print("로그아웃 되기"); // todo
                               },
                               child: const Text("로그아웃"),
                             ),
@@ -256,7 +257,7 @@ class _MyPageState extends State<MyPage> {
                       ),
                       InkWell( // Trip To Travel 소개하기!(친구초대) 카카오톡 메시지 api 같은거 쓰면 좋겠네요
                         onTap: () {
-                          print("친구초대");
+                          print("친구초대"); // todo
                         },
                         child: Container(
                             color: const Color(0xff76BDFF),
