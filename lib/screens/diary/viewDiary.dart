@@ -46,7 +46,7 @@ class _ViewDiaryState extends State<ViewDiary> {
         ),
         actions: [
           IconButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: '2023년 7월 14일 (금)',)));
           }, icon: Icon(Icons.edit_outlined))
         ],
       ),

@@ -4,15 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class WriteDiary extends StatefulWidget {
-  const WriteDiary({super.key});
+  final String selectedDate;
+
+  const WriteDiary({super.key, required this.selectedDate});
 
   @override
   State<WriteDiary> createState() => _WriteDiaryState();
 }
 
 class _WriteDiaryState extends State<WriteDiary> {
+  String _selectedDate = "";
   List<File> _selectedImages = [];
   bool _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = widget.selectedDate;
+  }
+
 
   Future<void> _pickImages() async {
     setState(() {
@@ -69,7 +79,7 @@ class _WriteDiaryState extends State<WriteDiary> {
           },
           icon: Icon(Icons.close),
         ),
-        title: Text("날짜", style: TextStyle(color: Colors.black, fontSize: 16),),
+        title: Text(_selectedDate, style: TextStyle(color: Colors.black, fontSize: 16),),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.check))
         ],
@@ -111,7 +121,7 @@ class _WriteDiaryState extends State<WriteDiary> {
                   cursorColor: Color(0xff76BDFF),
                 ),
               ),
-              if (_loading) // 로딩 중일 때 로딩 표시를 표시합니다.
+              if (_loading)
                 CircularProgressIndicator(),
               Expanded(
                 child: GridView.count(

@@ -72,7 +72,7 @@ class _CalendarState extends State<Calendar> {
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
                           mainAxisSpacing: 18.0,
-                          childAspectRatio: 1 / 0.5, //item 의 가로 1, 세로 1 의 비율
+                          childAspectRatio: 1 / 0.5,
                         ),
                         itemCount: itemList.length,
                         itemBuilder: (BuildContext context, int index) {
