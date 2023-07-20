@@ -1,8 +1,11 @@
 import 'package:app/starting.dart';
 import 'package:double_back_to_close/double_back_to_close.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  await initializeDateFormatting();
+
   runApp(const MyApp());
 }
 

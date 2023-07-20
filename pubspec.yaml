@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   table_calendar: ^3.0.9
+  intl: ^0.18.0
   double_back_to_close: ^2.0.0
   image_picker: ^0.8.4+4
 

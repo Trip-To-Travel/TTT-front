@@ -89,6 +89,7 @@ class _CalendarMainState extends State<CalendarMain> {
               Column(
                 children: [
                   TableCalendar(
+                    locale: 'ko_KR',
                     firstDay: DateTime.utc(2000, 1, 1),
                     lastDay: DateTime.utc(2030, 12, 31),
                     // locale: 'ko-KR',
