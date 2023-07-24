@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class YearEnd extends StatefulWidget {
@@ -13,8 +14,77 @@ class _YearEndState extends State<YearEnd> {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
 
+    final CarouselController _controller = CarouselController();
+    int current = 0;
+
     const int currentYear = 2023; // todo: 금년도
     const String userNickname = "테스트트래블러"; // todo: 접속 중인 사용자의 닉네임/이름
+
+    List yearEndList = [
+      {
+        "text": "반가워요",
+        "image": "https://images.unsplash.com/photo-1474376962954-d8a681cc53b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8dHJpcCx0cmF2ZWx8fHx8fHwxNjkwMjAyMDQw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+      },
+      {
+        "text": "좋아해요",
+        "image": "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8dHJpcCx0cmF2ZWx8fHx8fHwxNjkwMjAyMTM5&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+      },
+      {
+        "text": "감사해요",
+        "image": "https://images.unsplash.com/photo-1444210971048-6130cf0c46cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8dHJpcCx0cmF2ZWx8fHx8fHwxNjkwMjAyMTc0&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+      },
+    ];
+
+    Widget yearEndSlider() {
+      return CarouselSlider(
+        options: CarouselOptions(
+          height: deviceHeight * 0.80,
+          viewportFraction: 0.85,
+          enlargeCenterPage: true,
+          onPageChanged: (index, reason) { // indicator 조작 위해
+            setState(() {
+              current = index;
+            });
+          },
+        ),
+        items: yearEndList.map((i) {
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(
+                    color: Colors.amber
+                ),
+                child: Text('$i', style: TextStyle(fontSize: 16.0),),
+              );
+            },
+          );
+        }).toList(),
+      );
+    }
+
+    Widget sliderIndicator() { // indicator
+      return Align(
+        alignment: Alignment.topCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: yearEndList.asMap().entries.map((entry) {
+            return GestureDetector(
+              child: Container(
+                width: 8,
+                height: 8,
+                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(current == entry.key ? 0.9 : 0.4),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -72,11 +142,27 @@ class _YearEndState extends State<YearEnd> {
           SliverPadding(
             padding: const EdgeInsets.all(16),
             sliver: SliverToBoxAdapter( // todo: 여기 InkWell 씌워서, 클릭 시 해당 장소에 대한 정보 나타내도록 하는 건 어떨까?
-              child: Text(
-                "${userNickname}님의 올 한 해 기록을 정리해 보았어요.",
-              ),
+              child: Row(
+                children: [
+                  Text(
+                    userNickname,
+                    style: const TextStyle(
+                      color: Color(0xff76BDFF),
+                    ),
+                  ),
+                  const Text(" 님의 올 한 해 기록을 정리해 보았어요.")
+                ],
+              )
             ),
           ),
+          SliverToBoxAdapter(
+            child: Stack(
+              children: [
+                yearEndSlider(),
+                sliderIndicator(),
+              ],
+            ),
+          )
         ]
       ),
     );
