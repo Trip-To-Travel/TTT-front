@@ -14,7 +14,6 @@ class _YearEndState extends State<YearEnd> {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
 
-    final CarouselController _controller = CarouselController();
     int current = 0;
 
     const int currentYear = 2023; // todo: 금년도
@@ -35,10 +34,20 @@ class _YearEndState extends State<YearEnd> {
       },
     ];
 
+    AppBar appBar = AppBar(
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(Icons.arrow_back),
+      ),
+      title: const Text("연말정산", style: TextStyle(color: Colors.black, fontSize: 16),),
+    );
+
     Widget yearEndSlider() {
       return CarouselSlider(
         options: CarouselOptions(
-          height: deviceHeight * 0.80,
+          height: deviceHeight - 2 * appBar.preferredSize.height, // 하단 nav bar까지 고려해서 `* 2` 했어요
           viewportFraction: 0.85,
           enlargeCenterPage: true,
           onPageChanged: (index, reason) { // indicator 조작 위해
@@ -64,7 +73,7 @@ class _YearEndState extends State<YearEnd> {
       );
     }
 
-    Widget sliderIndicator() { // indicator
+    Widget sliderIndicator() { // indicator todo: 아직 정상 작동 안함
       return Align(
         alignment: Alignment.topCenter,
         child: Row(
@@ -87,15 +96,7 @@ class _YearEndState extends State<YearEnd> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: const Text("연말정산", style: TextStyle(color: Colors.black, fontSize: 16),),
-      ),
+      appBar: appBar,
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter( // 타이틀
