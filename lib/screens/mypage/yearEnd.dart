@@ -9,15 +9,15 @@ class YearEnd extends StatefulWidget {
 }
 
 class _YearEndState extends State<YearEnd> {
+  int current = 0;
+
+  int currentYear = 2023; // todo: 금년도
+  String userNickname = "테스트트래블러"; // todo: 접속 중인 사용자의 닉네임/이름
+
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
-
-    int current = 0;
-
-    const int currentYear = 2023; // todo: 금년도
-    const String userNickname = "테스트트래블러"; // todo: 접속 중인 사용자의 닉네임/이름
 
     List yearEndList = [
       {
@@ -61,7 +61,7 @@ class _YearEndState extends State<YearEnd> {
             builder: (BuildContext context) {
               return Container(
                 width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                margin: const EdgeInsets.symmetric(horizontal: 5.0),
                 decoration: BoxDecoration(
                     color: Colors.amber
                 ),
@@ -79,15 +79,13 @@ class _YearEndState extends State<YearEnd> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: yearEndList.asMap().entries.map((entry) {
-            return GestureDetector(
-              child: Container(
-                width: 8,
-                height: 8,
-                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(current == entry.key ? 0.9 : 0.4),
-                ),
+            return Container(
+              width: 18,
+              height: 6,
+              margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 4.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white.withOpacity(current == entry.key ? 0.9 : 0.4),
               ),
             );
           }).toList(),
