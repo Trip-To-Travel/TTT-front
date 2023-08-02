@@ -20,18 +20,11 @@ class _YearEndState extends State<YearEnd> {
     final deviceHeight = MediaQuery.of(context).size.height;
 
     List yearEndList = [
-      {
-        "text": "반가워요",
-        "image": "https://images.unsplash.com/photo-1474376962954-d8a681cc53b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8dHJpcCx0cmF2ZWx8fHx8fHwxNjkwMjAyMDQw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-      },
-      {
-        "text": "좋아해요",
-        "image": "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8dHJpcCx0cmF2ZWx8fHx8fHwxNjkwMjAyMTM5&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-      },
-      {
-        "text": "감사해요",
-        "image": "https://images.unsplash.com/photo-1444210971048-6130cf0c46cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8dHJpcCx0cmF2ZWx8fHx8fHwxNjkwMjAyMTc0&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-      },
+      yearEndItem01(),
+      yearEndItem02(),
+      yearEndItem03(),
+      yearEndItem04(),
+      yearEndItem05(),
     ];
 
     AppBar appBar = AppBar(
@@ -59,21 +52,14 @@ class _YearEndState extends State<YearEnd> {
         items: yearEndList.map((i) {
           return Builder(
             builder: (BuildContext context) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                decoration: BoxDecoration(
-                    color: Colors.amber
-                ),
-                child: Text('$i', style: TextStyle(fontSize: 16.0),),
-              );
+              return i; // page 각각 디자인, 구성이 다름
             },
           );
         }).toList(),
       );
     }
 
-    Widget sliderIndicator() { // indicator todo: 아직 정상 작동 안함
+    Widget sliderIndicator() { // indicator
       return Align(
         alignment: Alignment.topCenter,
         child: Row(
@@ -166,4 +152,49 @@ class _YearEndState extends State<YearEnd> {
       ),
     );
   }
+}
+
+Widget yearEndItem01() { // 금년도 작성한 총 다이어리 갯수
+  return Container(
+    width: double.infinity,
+    height: double.infinity,
+    color: Colors.amber,
+    child: Text("금년도 작성한 총 다이어리 갯수"),
+  );
+}
+
+Widget yearEndItem02() { // 금년도 가장 자주 찾은 장소(테마 별 카운팅)
+  return Container(
+    width: double.infinity,
+    height: double.infinity,
+    color: Colors.amber,
+    child: Text("금년도 가장 자주 찾은 장소(테마 별 카운팅)"),
+  );
+}
+
+Widget yearEndItem03() { // 금년도 가장 길게(내용 byte 길이) 작성한 다이어리
+  return Container(
+    width: double.infinity,
+    height: double.infinity,
+    color: Colors.amber,
+    child: Text("금년도 가장 길게(내용 byte 길이) 작성한 다이어리"),
+  );
+}
+
+Widget yearEndItem04() { // 금년도 가장 활발히 작성한 달(월별 다이어리 개수 카운팅)
+  return Container(
+    width: double.infinity,
+    height: double.infinity,
+    color: Colors.amber,
+    child: Text("금년도 가장 활발히 작성한 달(월별 다이어리 개수 카운팅)"),
+  );
+}
+
+Widget yearEndItem05() { // 금년도 여러 번 반복해 방문한 장소
+  return Container(
+    width: double.infinity,
+    height: double.infinity,
+    color: Colors.amber,
+    child: Text("금년도 여러 번 반복해 방문한 장소"),
+  );
 }
