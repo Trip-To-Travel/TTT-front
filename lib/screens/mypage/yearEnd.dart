@@ -20,6 +20,7 @@ class _YearEndState extends State<YearEnd> {
   // 연말정산 widget 02
   String favoriteTheme = '카페'; // todo; 금년도 가장 자주 찾은 장소(테마)
   String favoriteThemeThumbnail = "https://source.unsplash.com/featured/?trip,travel"; // todo: 임시 이미지 경로
+  int howManyTimesVisits = 12; // todo: 해당 테마인 장소들에 방문한 총 횟수
 
   // 연말정산 widget 03
   String longestDiary = '2023-07-31'; // todo: 금년도 내용이 가장 긴 다이어리가 작성된 날짜
@@ -46,8 +47,8 @@ class _YearEndState extends State<YearEnd> {
     final deviceHeight = MediaQuery.of(context).size.height;
 
     List yearEndList = [
-      yearEndItem01(userNickname, howManyDiary),
-      yearEndItem02(favoriteTheme, favoriteThemeThumbnail),
+      yearEndItem01(userNickname, howManyDiary, deviceWidth),
+      yearEndItem02(favoriteTheme, favoriteThemeThumbnail, howManyTimesVisits, deviceWidth),
       yearEndItem03(longestDiary, longestDiaryThumbnail),
       yearEndItem04(mostActiveMonth, howManyDiaryMonth,
           activeMonthImage01, activeMonthImage02, activeMonthImage03, activeMonthImage04, activeMonthImage05),
@@ -181,7 +182,8 @@ class _YearEndState extends State<YearEnd> {
   }
 }
 
-Widget yearEndItem01(String nickname, int howManyDiary) { // 금년도 작성한 총 다이어리 갯수
+Widget yearEndItem01(String nickname, int howManyDiary,
+    final deviceWidth) { // 금년도 작성한 총 다이어리 갯수
   return Container(
     width: double.infinity,
     height: double.infinity,
@@ -199,11 +201,11 @@ Widget yearEndItem01(String nickname, int howManyDiary) { // 금년도 작성한
           ),
         ),
         Positioned(
-          left: 40,
-          bottom: 20,
+          left: deviceWidth * 0.12,
+          bottom: 0,
           child: Container(
-              width: 400,
-              height: 400,
+              width: deviceWidth,
+              height: deviceWidth,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/year-end-graphic-01.png'),
@@ -217,23 +219,64 @@ Widget yearEndItem01(String nickname, int howManyDiary) { // 금년도 작성한
   );
 }
 
-Widget yearEndItem02(String favoriteTheme, String favoriteThemeThumbnail) { // 금년도 가장 자주 찾은 장소(테마 별 카운팅)
+Widget yearEndItem02(String favoriteTheme, String favoriteThemeThumbnail, int howManyTimesVisits,
+    final deviceWidth) { // 금년도 가장 자주 찾은 장소(테마 별 카운팅)
   return Container(
     width: double.infinity,
     height: double.infinity,
-    color: Colors.amber,
-    padding: const EdgeInsets.fromLTRB(20, 60, 20, 60),
-    child: Column(
+    color: const Color(0xff181B4D),
+    child: Stack(
       children: [
-        Text("가장 자주 찾은 장소는 \'$favoriteTheme\' 에요."),
         Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-                image: NetworkImage(favoriteThemeThumbnail),
-                fit: BoxFit.cover
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(10, 120, 20, 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "가장 자주 찾은\n테마 장소는\n\'$favoriteTheme\' 에요.",
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                    color: Color(0xff71FDE0),
+                    fontSize: 32
+                ),
+              ),
+              Text(
+                "\'$favoriteTheme\' 테마 장소에 방문한 총 횟수 $howManyTimesVisits 회",
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                    color: Color(0xff71FDE0),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          right: deviceWidth * 0.1,
+          bottom: deviceWidth * 0.034,
+          child: Container(
+              width: deviceWidth,
+              height: deviceWidth * 0.4,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/year-end-02-background-graphic.png'),
+                  fit: BoxFit.fitWidth,
+                ),
+              )
+          ),
+        ),
+        Positioned(
+          right: deviceWidth * 0.1,
+          bottom: deviceWidth * 0.2,
+          child: Container(
+            width: deviceWidth,
+            height: deviceWidth,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                  image: NetworkImage(favoriteThemeThumbnail),
+                  fit: BoxFit.cover
+              ),
             ),
           ),
         ),
