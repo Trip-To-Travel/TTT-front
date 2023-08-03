@@ -153,7 +153,7 @@ class _YearEndState extends State<YearEnd> {
           ),
           SliverPadding(
             padding: const EdgeInsets.all(16),
-            sliver: SliverToBoxAdapter( // todo: 여기 InkWell 씌워서, 클릭 시 해당 장소에 대한 정보 나타내도록 하는 건 어떨까?
+            sliver: SliverToBoxAdapter(
               child: Row(
                 children: [
                   Text(
@@ -185,11 +185,33 @@ Widget yearEndItem01(String nickname, int howManyDiary) { // 금년도 작성한
   return Container(
     width: double.infinity,
     height: double.infinity,
-    color: Colors.amber,
-    padding: const EdgeInsets.fromLTRB(20, 60, 20, 60),
-    child: Column(
+    color: Colors.black87,
+    child: Stack(
       children: [
-        Text("올해 $nickname 님은 $howManyDiary 장의 다이어리를 작성했어요."),
+        Container(
+          padding: const EdgeInsets.fromLTRB(10, 80, 10, 80),
+          child: Text(
+              "올해\n$nickname 님은\n총 $howManyDiary 장의 다이어리를\n작성했어요.",
+            style: const TextStyle(
+              color: Color(0xffE9E9E9),
+              fontSize: 30
+            ),
+          ),
+        ),
+        Positioned(
+          left: 40,
+          bottom: 20,
+          child: Container(
+              width: 400,
+              height: 400,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/year-end-graphic-01.png'),
+                  fit: BoxFit.fitWidth,
+                ),
+              )
+          ),
+        ),
       ],
     ),
   );
