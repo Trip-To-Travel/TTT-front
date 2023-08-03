@@ -54,7 +54,7 @@ class _YearEndState extends State<YearEnd> {
       yearEndItem03(longestDiary, longestDiaryThumbnail, numberOfCharacter, deviceWidth),
       yearEndItem04(mostActiveMonth, howManyDiaryMonth, deviceWidth,
           activeMonthImage01, activeMonthImage02, activeMonthImage03, activeMonthImage04, activeMonthImage05),
-      yearEndItem05(multipleVisitsThumbnail, multipleVisitsName, multipleVisitsAddress, multipleVisitsCount),
+      yearEndItem05(multipleVisitsThumbnail, multipleVisitsName, multipleVisitsAddress, multipleVisitsCount, deviceWidth),
     ];
 
     AppBar appBar = AppBar(
@@ -455,18 +455,29 @@ Widget yearEndItem04(int mostActiveMonth, int howManyDiaryMonth, final deviceWid
 }
 
 Widget yearEndItem05(String multipleVisitsThumbnail,
-    String multipleVisitsName, String multipleVisitsAddress, int multipleVisitsCount) { // 금년도 여러 번 반복해 방문한 장소
+    String multipleVisitsName, String multipleVisitsAddress, int multipleVisitsCount,
+    final deviceWidth) { // 금년도 여러 번 반복해 방문한 장소
   return Container(
     width: double.infinity,
     height: double.infinity,
-    color: Colors.amber,
-    padding: const EdgeInsets.fromLTRB(20, 60, 20, 60),
+    color: const Color(0xff3f2f18),
     child: Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text("여러 번 방문한 장소가 있어요."),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(
+            "여러 번 찾으신 장소가 있어요.",
+            style: TextStyle(
+                color: Color(0xfffdf8e5),
+                fontSize: 32
+            ),
+          ),
+        ),
         Container(
-          width: 150,
-          height: 150,
+          width: double.infinity,
+          height: deviceWidth*0.6,
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: NetworkImage(multipleVisitsThumbnail),
@@ -474,9 +485,37 @@ Widget yearEndItem05(String multipleVisitsThumbnail,
             ),
           ),
         ),
-        Text(multipleVisitsName),
-        Text(multipleVisitsAddress),
-        Text("$multipleVisitsCount 번 방문"),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                multipleVisitsName,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: Color(0xfffdf8e5),
+                    fontSize: 20
+                ),
+              ),
+              Text(
+                multipleVisitsAddress,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: Color(0xfffdf8e5),
+                ),
+              ),
+              Text(
+                "\n올해 총 $multipleVisitsCount 번 방문",
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: Color(0xfffdf8e5),
+                    fontSize: 20
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     ),
   );
