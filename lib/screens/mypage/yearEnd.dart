@@ -52,7 +52,7 @@ class _YearEndState extends State<YearEnd> {
       yearEndItem01(userNickname, howManyDiary, deviceWidth),
       yearEndItem02(favoriteTheme, favoriteThemeThumbnail, howManyTimesVisits, deviceWidth),
       yearEndItem03(longestDiary, longestDiaryThumbnail, numberOfCharacter, deviceWidth),
-      yearEndItem04(mostActiveMonth, howManyDiaryMonth,
+      yearEndItem04(mostActiveMonth, howManyDiaryMonth, deviceWidth,
           activeMonthImage01, activeMonthImage02, activeMonthImage03, activeMonthImage04, activeMonthImage05),
       yearEndItem05(multipleVisitsThumbnail, multipleVisitsName, multipleVisitsAddress, multipleVisitsCount),
     ];
@@ -347,64 +347,106 @@ Widget yearEndItem03(String longestDiary, String longestDiaryThumbnail, int numb
   );
 }
 
-Widget yearEndItem04(int mostActiveMonth, int howManyDiaryMonth,
+Widget yearEndItem04(int mostActiveMonth, int howManyDiaryMonth, final deviceWidth,
     String activeMonthImage01, String activeMonthImage02, String activeMonthImage03, String activeMonthImage04, String activeMonthImage05) { // 금년도 가장 활발히 작성한 달(월별 다이어리 개수 카운팅)
   return Container(
     width: double.infinity,
     height: double.infinity,
-    color: Colors.amber,
-    padding: const EdgeInsets.fromLTRB(20, 60, 20, 60),
-    child: Column(
+    color: const Color(0xff1c3826),
+    child: Stack(
       children: [
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(activeMonthImage01),
-                fit: BoxFit.cover
+        Positioned(
+          right: - deviceWidth * 0.2,
+          top: - deviceWidth * 0.1,
+          width: deviceWidth,
+          child: Image.asset('assets/images/year-end-04-background-graphic.png'),
+        ),
+        Positioned(
+          right: -deviceWidth*0.1,
+          top: deviceWidth*0.36,
+          child: Container(
+            width: deviceWidth * 0.36,
+            height: deviceWidth * 0.36,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(activeMonthImage02),
+                  fit: BoxFit.cover
+              ),
             ),
           ),
         ),
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(activeMonthImage02),
-                fit: BoxFit.cover
+        Positioned(
+          top: deviceWidth*0.16,
+          left: deviceWidth*0.05,
+          child: Container(
+            width: deviceWidth * 0.44,
+            height: deviceWidth * 0.44,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(activeMonthImage01),
+                  fit: BoxFit.cover
+              ),
             ),
           ),
         ),
-        Text("$mostActiveMonth월에 가장 활발히 활동했어요. $mostActiveMonth월에 작성된 다이어리는 $howManyDiaryMonth장 입니다."),
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(activeMonthImage03),
-                fit: BoxFit.cover
+        Positioned(
+          left: -deviceWidth*0.1,
+          bottom: deviceWidth*0.32,
+          child: Container(
+            width: deviceWidth * 0.36,
+            height: deviceWidth * 0.36,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(activeMonthImage03),
+                  fit: BoxFit.cover
+              ),
             ),
           ),
         ),
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(activeMonthImage04),
-                fit: BoxFit.cover
+        Positioned(
+          bottom: deviceWidth*0.12,
+          left: deviceWidth*0.2,
+          child: Container(
+            width: deviceWidth * 0.48,
+            height: deviceWidth * 0.48,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(activeMonthImage04),
+                  fit: BoxFit.cover
+              ),
             ),
           ),
         ),
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(activeMonthImage05),
-                fit: BoxFit.cover
+        Positioned(
+          bottom: deviceWidth*0.2,
+          right: -deviceWidth*0.2,
+          child: Container(
+            width: deviceWidth * 0.3,
+            height: deviceWidth * 0.3,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(activeMonthImage05),
+                  fit: BoxFit.cover
+              ),
             ),
+          ),
+        ),
+        Container( // stack top에 내용 배치.
+          height: double.infinity,
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "$mostActiveMonth월에 가장 활발히\n활동했어요.\n$mostActiveMonth월에 작성된 다이어리는 총 $howManyDiaryMonth장 입니다.",
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                    color: Color(0xffecffe3),
+                    fontSize: 32
+                ),
+              ),
+            ],
           ),
         ),
       ],
