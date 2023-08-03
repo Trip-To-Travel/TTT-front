@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class YearEnd extends StatefulWidget {
   const YearEnd({super.key});
@@ -25,6 +26,7 @@ class _YearEndState extends State<YearEnd> {
   // 연말정산 widget 03
   String longestDiary = '2023-07-31'; // todo: 금년도 내용이 가장 긴 다이어리가 작성된 날짜
   String longestDiaryThumbnail = "https://source.unsplash.com/featured/?trip,travel"; // todo: 임시 이미지 경로
+  int numberOfCharacter = 13435; // todo:
 
   // 연말정산 widget 04
   int mostActiveMonth = 7; // todo: 금년도 다이어리가 가장 많이 작성된 달
@@ -49,7 +51,7 @@ class _YearEndState extends State<YearEnd> {
     List yearEndList = [
       yearEndItem01(userNickname, howManyDiary, deviceWidth),
       yearEndItem02(favoriteTheme, favoriteThemeThumbnail, howManyTimesVisits, deviceWidth),
-      yearEndItem03(longestDiary, longestDiaryThumbnail),
+      yearEndItem03(longestDiary, longestDiaryThumbnail, numberOfCharacter, deviceWidth),
       yearEndItem04(mostActiveMonth, howManyDiaryMonth,
           activeMonthImage01, activeMonthImage02, activeMonthImage03, activeMonthImage04, activeMonthImage05),
       yearEndItem05(multipleVisitsThumbnail, multipleVisitsName, multipleVisitsAddress, multipleVisitsCount),
@@ -229,7 +231,7 @@ Widget yearEndItem02(String favoriteTheme, String favoriteThemeThumbnail, int ho
       children: [
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(10, 120, 20, 10),
+          padding: const EdgeInsets.fromLTRB(10, 80, 10, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -285,26 +287,61 @@ Widget yearEndItem02(String favoriteTheme, String favoriteThemeThumbnail, int ho
   );
 }
 
-Widget yearEndItem03(String longestDiary, String longestDiaryThumbnail) { // 금년도 가장 길게(내용 byte 길이) 작성한 다이어리
+Widget yearEndItem03(String longestDiary, String longestDiaryThumbnail, int numberOfCharacter,
+    final deviceWidth) { // 금년도 가장 길게(내용 byte 길이) 작성한 다이어리
+  var f = NumberFormat('###,###,###,###');
+  
   return Container(
     width: double.infinity,
     height: double.infinity,
-    color: Colors.amber,
-    padding: const EdgeInsets.fromLTRB(20, 60, 20, 60),
-    child: Column(
+    color: const Color(0xff4d1818),
+    child: Stack(
       children: [
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-                image: NetworkImage(longestDiaryThumbnail),
-                fit: BoxFit.cover
-            ),
-          ),
+        Positioned(
+          left: -8,
+          top: deviceWidth * 0.1,
+          child: Image.asset('assets/images/year-end-03-background-graphic.png'),
         ),
-        Text("가장 길게 작성된 다이어리는 \'$longestDiary\'의 기록이에요."),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: deviceWidth * 0.7,
+              height: deviceWidth * 0.7,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: NetworkImage(longestDiaryThumbnail),
+                    fit: BoxFit.cover
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(10, 60, 10, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "가장 길게 작성된\n다이어리는 \'$longestDiary\' 의\n기록됐어요.",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        color: Color(0xffffe3e3),
+                        fontSize: 32
+                    ),
+                  ),
+                  Text(
+                    "\'$longestDiary\' 에 작성된 총 글자 수 ${f.format(numberOfCharacter)} 자",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      color: Color(0xffffe3e3),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ],
     ),
   );
