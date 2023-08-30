@@ -1,3 +1,4 @@
+import 'package:app/screens/calendar/calendar.dart';
 import 'package:app/screens/diary/viewDiary.dart';
 import 'package:app/screens/diary/writeDiary.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,9 @@ class CalendarMain extends StatefulWidget {
 }
 
 class _CalendarMainState extends State<CalendarMain> {
+  DateTime? _startDate;
+  DateTime? _endDate;
+
   bool _showTodayButton = false;
 
 
@@ -75,6 +79,37 @@ class _CalendarMainState extends State<CalendarMain> {
     }
   }
 
+  Future<void> _showStartDatePicker() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _startDate ?? DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2023, 12, 31),
+    );
+
+    if (picked != null && picked != _startDate) {
+      setState(() {
+        _startDate = picked;
+      });
+    }
+  }
+
+  Future<void> _showEndDatePicker() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _endDate ?? DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2023, 12, 31),
+    );
+
+    if (picked != null && picked != _endDate) {
+      setState(() {
+        _endDate = picked;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -100,9 +135,9 @@ class _CalendarMainState extends State<CalendarMain> {
                     selectedDayPredicate: (day) {
                       return isSameDay(_selectedDay, day);
                     },
-                    calendarStyle: CalendarStyle(
-                      cellMargin : const EdgeInsets.all(12.0),
-                      todayDecoration : const BoxDecoration(
+                    calendarStyle: const CalendarStyle(
+                      cellMargin : EdgeInsets.all(12.0),
+                      todayDecoration : BoxDecoration(
                         color: Colors.black38,
                         shape: BoxShape.circle,
                       ),
@@ -149,19 +184,45 @@ class _CalendarMainState extends State<CalendarMain> {
                     },
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _showStartDatePicker,
+                        child: Text(_startDate==null? "시작 날짜" :_startDate.toString().split(" ")[0]),
+                      ),
+                      const Text("~"),
+                      ElevatedButton(
+                        onPressed: _showEndDatePicker,
+                        child: Text(_endDate==null? "끝 날짜" :_endDate.toString().split(" ")[0]),
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            if(_startDate!= null && _endDate!= null){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Calendar(
+                                startDate: _startDate.toString().split(" ")[0],
+                                endDate: _endDate.toString().split(" ")[0],
+                              )));
+                            }
+                          },
+                          child: const Text("적용")
+                      )
+                    ],
                   ),
 
                   // 선택할때 다이어리 미리 보기 뜨는 곳.
                   if (_selectedDiary.isNotEmpty)
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
-                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDiary()));},
+                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const ViewDiary()));},
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(9, 0, 9, 0),
+                        padding: const EdgeInsets.fromLTRB(9, 5, 9, 0),
                         child: Container(
-                          height: idealHeight * 150,
+                          height: idealHeight * 130,
                           width: double.infinity,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
@@ -182,11 +243,11 @@ class _CalendarMainState extends State<CalendarMain> {
                                   child: Image.asset(
                                     _selectedDiary["image"]!= null ? _selectedDiary["image"] as String : "",
                                     fit: BoxFit.fill,
-                                    width: idealWidth * 140,
-                                    height: idealHeight * 140,
+                                    width: idealWidth * 120,
+                                    height: idealHeight * 120,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Flexible(
@@ -194,20 +255,20 @@ class _CalendarMainState extends State<CalendarMain> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(_selectedDiary["date"]!= null ? _selectedDiary["date"] as String : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 12,
                                             color: Colors.grey
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(_selectedDiary["title"]!= null ? _selectedDiary["title"] as String : "default",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14
                                         ),
@@ -236,7 +297,7 @@ class _CalendarMainState extends State<CalendarMain> {
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all<Size>(Size(85, 30)),
+                        fixedSize: MaterialStateProperty.all<Size>(const Size(85, 30)),
                       ),
                       onPressed: () {
                         setState(() {
@@ -247,7 +308,7 @@ class _CalendarMainState extends State<CalendarMain> {
                         });
                       },
                       child: Row(
-                        children: [
+                        children: const [
                           Icon(Icons.chevron_left),
                           Text('오늘')
                         ],
@@ -262,8 +323,8 @@ class _CalendarMainState extends State<CalendarMain> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: "${_selectedDay.toString().split(" ")[0]} (${_getWeekDay(_selectedDay)})",)));
         },
-        backgroundColor: Color(0xff76BDFF),
-        shape: RoundedRectangleBorder(
+        backgroundColor: const Color(0xff76BDFF),
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50.0))
         ),
         child: const Icon(Icons.mode_edit_outline_outlined, color: Colors.white,),

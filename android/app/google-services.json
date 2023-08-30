@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "112879024646",
+    "project_id": "triptotravel-71d2c",
+    "storage_bucket": "triptotravel-71d2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112879024646:android:2de0bb9897c641a9ba6187",
+        "android_client_info": {
+          "package_name": "com.ttt.t3s"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112879024646-vni1tsb0912ljiro0b0b7g722l76pdre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXglawiE-cCHevfzfCLZ2Zi858UWQy_Bk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112879024646-vni1tsb0912ljiro0b0b7g722l76pdre.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "112879024646-v94g8512lmgph9hcih88bcg6c8csu229.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.app.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

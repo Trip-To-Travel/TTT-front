@@ -2,13 +2,27 @@ import 'package:app/screens/diary/viewDiary.dart';
 import 'package:flutter/material.dart';
 
 class Calendar extends StatefulWidget {
-  const Calendar({super.key});
+  final String startDate;
+  final String endDate;
+
+  const Calendar({super.key, required this.startDate, required this.endDate});
 
   @override
   State<Calendar> createState() => _CalendarState();
 }
 
 class _CalendarState extends State<Calendar> {
+  String? _startDate;
+  String? _endDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _startDate = widget.startDate;
+    _endDate = widget.endDate;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -53,17 +67,26 @@ class _CalendarState extends State<Calendar> {
             height: deviceHeight,
             width: deviceWidth,
             padding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-            child:
-            Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("2023", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
-                      Text("07.02 ~ 07.08", style: TextStyle(fontSize: 18,),)
-                    ],
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 32, 0, 20),
+                  child: SizedBox(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_startDate!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text("~", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text(_endDate!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+                      ],
+                    ),
                   ),
                 ),
                 Flexible(
@@ -88,11 +111,19 @@ class _CalendarState extends State<Calendar> {
                                     child: Container(
                                       padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
                                       height: double.infinity,
-                                      child: Image(
-                                        image: AssetImage(itemList[index]["image"]),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    )
+                                      child: Container(
+                                        padding: EdgeInsets.all(0.5),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                                image: AssetImage(itemList[index]["image"]),
+                                                fit: BoxFit.cover)
+                                        ),
+                                      )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 6,
                                   ),
                                   SizedBox(
                                     width: idealWidth * 160,
@@ -100,7 +131,7 @@ class _CalendarState extends State<Calendar> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text(itemList[index]["date"]),
+                                        Text(itemList[index]["date"], style: TextStyle(fontWeight: FontWeight.bold),),
                                         Text(itemList[index]["detail"]),
                                       ],
                                     ),

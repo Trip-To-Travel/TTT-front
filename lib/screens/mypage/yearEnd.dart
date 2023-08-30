@@ -12,7 +12,7 @@ class YearEnd extends StatefulWidget {
 class _YearEndState extends State<YearEnd> {
   int current = 0;
 
-  int currentYear = 2023; // todo: 금년도
+  int currentYear = 2023; //// : 금년도
   String userNickname = "테스트트래블러"; // todo: 접속 중인 사용자의 닉네임/이름
 
   // 연말정산 widget 01
