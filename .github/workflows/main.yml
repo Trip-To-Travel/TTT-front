@@ -1,35 +1,56 @@
-name: test-TTT-front
+name: build ttt app
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
-jobs:  
-  job1:
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '3.7.0'
+      - name: Download Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: key.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      - name: Create key.properties
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build APK
+        run: flutter build apk --release
+      - name: Rename APK
+        run: mv build/app/outputs/flutter-apk/app-release.apk ./ExampleApp-SNAPSHOT.apk
+      - name: Archive APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: android-build
+          path: ./ExampleApp-SNAPSHOT.apk
+  build_ios:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1
         with:
           flutter-version: '3.7.0'
-      - name: Install project dependencies
+      - name: Install dependencies
         run: flutter pub get
-      - name: Enable macOS build
-        run: flutter config --enable-macos-desktop
-      - name: Build artifacts
-        run: flutter build macos
-
-  job2:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - name: Build IOS
+        run: flutter build ios --release --no-codesign
+      - name: Archive IOS
+        uses: actions/upload-artifact@v1
         with:
-          flutter-version: '3.7.0'
-      - name: Install project dependencies
-        run: flutter pub get
-      - name: Enable windows build
-        run: flutter config --enable-windows-desktop
-      - name: Build artifacts
-        run: flutter build windows
+          name: ios-build
+          path: build/ios/iphoneos
