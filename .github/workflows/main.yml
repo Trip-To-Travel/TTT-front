@@ -14,18 +14,21 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           flutter-version: '3.7.0'
-      - name: Download Android keystore
-        id: android_keystore
-        uses: timheuer/base64-to-file@v1
-        with:
-          fileName: 'key.jks'
-          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      - name: Create key.properties
-        run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+          
+      # 배포시 주석해제해서 확인해보기
+      # - name: Download Android keystore
+      #   id: android_keystore
+      #   uses: timheuer/base64-to-file@v1
+      #   with:
+      #     fileName: 'key.jks'
+      #     encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      # - name: Create key.properties
+      #   run: |
+      #     echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+      #     echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+      #     echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+      #     echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+      
       - name: Install dependencies
         run: flutter pub get
       - name: Build APK
@@ -37,6 +40,7 @@ jobs:
         with:
           name: android-build
           path: ./ExampleApp-SNAPSHOT.apk
+          
   build_ios:
     runs-on: macos-latest
     steps:
