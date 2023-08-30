@@ -32,7 +32,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk
+        # run: flutter build apk --release
       - name: Rename APK
         run: mv build/app/outputs/flutter-apk/app-release.apk ./ExampleApp-SNAPSHOT.apk
       - name: Archive APK
