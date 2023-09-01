@@ -9,7 +9,7 @@ class ThemeRanking extends StatefulWidget {
     required this.theme,
   });
 
-  final int themeCode;
+  final String themeCode;
   final String image;
   final String theme;
 
