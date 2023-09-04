@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:native_exif/native_exif.dart';
 
 class WriteDiary extends StatefulWidget {
   final String selectedDate;
@@ -35,6 +36,9 @@ class _WriteDiaryState extends State<WriteDiary> {
         List<File> images = [];
         for (var pickedImage in pickedImages) {
           final File imageFile = File(pickedImage.path);
+          final exif = await Exif.fromPath(imageFile!.path);
+          final attributes = await exif.getAttributes();
+          print(attributes);
           images.add(imageFile);
         }
         setState(() {

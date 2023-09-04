@@ -40,6 +40,7 @@ dependencies:
   cloud_firestore: ^3.1.5
   dio: ^4.0.6
   cached_network_image: ^3.2.3
+  native_exif: ^0.4.0
   #  kakao_map_plugin: ^0.2.0
 
 
