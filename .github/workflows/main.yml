@@ -42,20 +42,21 @@ jobs:
           name: android-build
           path: ./ExampleApp-SNAPSHOT.apk
           
-  build_ios:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v1
-        with:
-          flutter-version: '3.7.0'
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Build IOS
-        run: flutter build ios --release --no-codesign
-      - name: Archive IOS
-        uses: actions/upload-artifact@v1
-        with:
-          name: ios-build
-          path: build/ios/iphoneos
+  # IOS로 개발 중지
+  # build_ios:
+  #   runs-on: macos-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v1
+  #       with:
+  #         flutter-version: '3.7.0'
+  #     - name: Install dependencies
+  #       run: flutter pub get
+  #     - name: Build IOS
+  #       run: flutter build ios --release --no-codesign
+  #     - name: Archive IOS
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         name: ios-build
+  #         path: build/ios/iphoneos
