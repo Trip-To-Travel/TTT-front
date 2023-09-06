@@ -59,11 +59,6 @@ class _CalendarMainState extends State<CalendarMain> {
     }
   }
 
-  String _getWeekDay(DateTime selectedDate) {
-    String weekday = ['월', '화', '수', '목', '금', '토', '일'][DateTime.now().weekday - 1];
-    return weekday;
-  }
-
   Map<String, String> _getDiaryForSelectedDate(DateTime selectedDate) {
     final formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
     final matchingItems = itemList.where((item) => item['date'] == formattedDate).toList();
@@ -321,7 +316,7 @@ class _CalendarMainState extends State<CalendarMain> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: "${_selectedDay.toString().split(" ")[0]} (${_getWeekDay(_selectedDay)})",)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: _selectedDay,)));
         },
         backgroundColor: const Color(0xff76BDFF),
         shape: const RoundedRectangleBorder(
