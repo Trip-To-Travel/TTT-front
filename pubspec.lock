@@ -213,10 +213,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
-      sha256: b63e3be6c96ef5c33bdec1aab23c91eb00696f6452f0519401d640938c94cba2
+      sha256: b51257a8b4388565cd66062d727d3e60067b5f5cc3390eb0ecd20b8f97741bdb
       url: "https://pub.dev"
     source: hosted
-    version: "4.8.0"
+    version: "4.5.1"
   firebase_core_web:
     dependency: transitive
     description:
@@ -225,6 +225,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.7.3"
+  firebase_storage:
+    dependency: "direct main"
+    description:
+      name: firebase_storage
+      sha256: e349113e65a98987f15f65902516085e8ea5dd808c1cb77495daa199980f6bfa
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.0.1"
+  firebase_storage_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_storage_platform_interface
+      sha256: "3a3f522ec552e4ba672db671e1c6ff737bee5328a780fa987b1457418927ca88"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
+  firebase_storage_web:
+    dependency: transitive
+    description:
+      name: firebase_storage_web
+      sha256: "64cb876e38fe915816ceab5906dbdf45c4332a94165e9a41dc95354abfb99a91"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -480,6 +504,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  permission_handler:
+    dependency: "direct main"
+    description:
+      name: permission_handler
+      sha256: ceb46041aef96f696aa7103641bd1b1a59e5c6c973253029888764fe3c95addb
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.4.4"
+  permission_handler_android:
+    dependency: transitive
+    description:
+      name: permission_handler_android
+      sha256: d74e77a5ecd38649905db0a7d05ef16bed42ff263b9efb73ed794317c5764ec3
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.3.4"
+  permission_handler_apple:
+    dependency: transitive
+    description:
+      name: permission_handler_apple
+      sha256: "99e220bce3f8877c78e4ace901082fb29fa1b4ebde529ad0932d8d664b34f3f5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.1.4"
+  permission_handler_platform_interface:
+    dependency: transitive
+    description:
+      name: permission_handler_platform_interface
+      sha256: "5d24686de72a4d57e512f6f06e5ecf714df237bbeef236c2aa59a3cb5e1ee788"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.11.4"
+  permission_handler_windows:
+    dependency: transitive
+    description:
+      name: permission_handler_windows
+      sha256: cc074aace208760f1eee6aa4fae766b45d947df85bc831cde77009cdb4720098
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3"
   platform:
     dependency: transitive
     description:

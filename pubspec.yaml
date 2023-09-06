@@ -32,15 +32,17 @@ dependencies:
     sdk: flutter
   table_calendar: ^3.0.9
   intl: ^0.18.0
+  permission_handler: ^10.0.0
   double_back_to_close: ^2.0.0
   image_picker: ^0.8.4+4
+  cached_network_image: ^3.2.3
   carousel_slider: ^4.2.1
   firebase_core: ^1.10.6
-#  firebase_auth: ^3.3.4
+  firebase_storage: 8.0.1
   cloud_firestore: ^3.1.5
   dio: ^4.0.6
-  cached_network_image: ^3.2.3
   native_exif: ^0.4.0
+  #  firebase_auth: ^3.6.3
   #  kakao_map_plugin: ^0.2.0
 
 

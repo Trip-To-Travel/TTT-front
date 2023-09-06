@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:app/const/permission_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:native_exif/native_exif.dart';
@@ -14,9 +16,23 @@ class WriteDiary extends StatefulWidget {
 }
 
 class _WriteDiaryState extends State<WriteDiary> {
+  final String colName = "diary";
+  final String fnTitle = "title";
+  final String fnContent = "content";
+  final String fnDate = "date";
+
   String _selectedDate = "";
   List<File> _selectedImages = [];
   bool _loading = false;
+
+  void createDoc(String title, String content, Timestamp date) {
+    FirebaseFirestore.instance.collection(colName).add({
+      fnTitle: title,
+      fnContent: content,
+      fnDate: date,
+    });
+  }
+
 
   @override
   void initState() {
@@ -32,7 +48,8 @@ class _WriteDiaryState extends State<WriteDiary> {
 
     try {
       final List<XFile>? pickedImages = await ImagePicker().pickMultiImage();
-      if (pickedImages != null) {
+
+      if (pickedImages!= null) {
         List<File> images = [];
         for (var pickedImage in pickedImages) {
           final File imageFile = File(pickedImage.path);
@@ -41,10 +58,34 @@ class _WriteDiaryState extends State<WriteDiary> {
           print(attributes);
           images.add(imageFile);
         }
-        setState(() {
-          _selectedImages = images;
-          _loading = false;
-        });
+
+        if(images.length > 3) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Error'),
+                content: Text('사진 첨부는 최대 3장까지 가능합니다.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _loading = false;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          setState(() {
+            _selectedImages = images;
+            _loading = false;
+          });
+        }
       } else {
         setState(() {
           _loading = false;
@@ -85,15 +126,17 @@ class _WriteDiaryState extends State<WriteDiary> {
         ),
         title: Text(_selectedDate, style: TextStyle(color: Colors.black, fontSize: 16),),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.check))
+          IconButton(onPressed: () {
+            // createDoc();
+          }, icon: Icon(Icons.check))
         ],
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.fromLTRB(11, 3, 11, 3),
+          padding: const EdgeInsets.fromLTRB(11, 3, 11, 3),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 child: TextField(
                   style: TextStyle(
                     fontSize: 17.0,
@@ -113,7 +156,7 @@ class _WriteDiaryState extends State<WriteDiary> {
                   autofocus: true,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 child: TextField(
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -126,7 +169,7 @@ class _WriteDiaryState extends State<WriteDiary> {
                 ),
               ),
               if (_loading)
-                CircularProgressIndicator(),
+                const CircularProgressIndicator(),
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 1,
@@ -148,9 +191,13 @@ class _WriteDiaryState extends State<WriteDiary> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: _pickImages,
+        onPressed: () async {
+          await PermissionManager().requestPermission().then((value) => {
+            _pickImages()
+          });
+        },
         backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50.0))
         ),
         child: const Icon(Icons.photo_library_outlined, color: Colors.black,),
