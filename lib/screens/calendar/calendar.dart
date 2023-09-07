@@ -1,25 +1,28 @@
+import 'package:app/model/diary_model.dart';
 import 'package:app/screens/diary/viewDiary.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Calendar extends StatefulWidget {
-  final String startDate;
-  final String endDate;
+  final List<DiaryModel> diaryList;
+  final int diaryNum;
 
-  const Calendar({super.key, required this.startDate, required this.endDate});
+  const Calendar({super.key, required this.diaryList, required this.diaryNum});
 
   @override
   State<Calendar> createState() => _CalendarState();
 }
 
 class _CalendarState extends State<Calendar> {
-  String? _startDate;
-  String? _endDate;
+  final koreanDateFormat = DateFormat('E', 'ko_KR');
+  List<DiaryModel>? _diaryList;
+  int? _diaryNum;
 
   @override
   void initState() {
     super.initState();
-    _startDate = widget.startDate;
-    _endDate = widget.endDate;
+    _diaryList = widget.diaryList;
+    _diaryNum = widget.diaryNum;
   }
 
 
@@ -29,24 +32,6 @@ class _CalendarState extends State<Calendar> {
     final deviceHeight = MediaQuery.of(context).size.height;
     final idealWidth = deviceWidth / 375;
     final idealHeight = deviceHeight / 667;
-
-    dynamic itemList = [
-      {
-        "image" : "assets/images/mockimg1.jpg",
-        "date" : "2023.07.01 (화)",
-        "detail" : "내가 어쩌고 저쩌고",
-      },
-      {
-        "image" : "assets/images/mockimg2.jpg",
-        "date" : "2023.07.01 (화)",
-        "detail" : "내가 어쩌고 저쩌고",
-      },
-      {
-        "image" : "assets/images/mockimg3.jpg",
-        "date" : "2023.07.01 (화)",
-        "detail" : "내가 어쩌고 저쩌고",
-      },
-    ];
 
 
     return Scaffold(
@@ -76,7 +61,7 @@ class _CalendarState extends State<Calendar> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_startDate!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                        Text("${DateFormat("yyyy/MM/dd").format(_diaryList!.first.date.toDate())} (${koreanDateFormat.format(_diaryList!.first.date.toDate())})"!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                         SizedBox(
                           width: 6,
                         ),
@@ -84,7 +69,7 @@ class _CalendarState extends State<Calendar> {
                         SizedBox(
                           width: 6,
                         ),
-                        Text(_endDate!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+                        Text("${DateFormat("yyyy/MM/dd").format(_diaryList!.last.date.toDate())} (${koreanDateFormat.format(_diaryList!.last.date.toDate())})"!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
                       ],
                     ),
                   ),
@@ -97,7 +82,7 @@ class _CalendarState extends State<Calendar> {
                           mainAxisSpacing: 18.0,
                           childAspectRatio: 1 / 0.5,
                         ),
-                        itemCount: itemList.length,
+                        itemCount: _diaryNum,
                         itemBuilder: (BuildContext context, int index) {
                           return SizedBox(
                             child: GestureDetector(
@@ -107,8 +92,8 @@ class _CalendarState extends State<Calendar> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                    child: Container(
+                                  _diaryList![index].image_list.isNotEmpty ? Expanded(
+                                    child:  Container(
                                       padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
                                       height: double.infinity,
                                       child: Container(
@@ -116,23 +101,27 @@ class _CalendarState extends State<Calendar> {
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(10),
                                             image: DecorationImage(
-                                                image: AssetImage(itemList[index]["image"]),
-                                                fit: BoxFit.cover)
+                                                image: NetworkImage(_diaryList![index].image_list.first),
+                                                fit: BoxFit.cover
+                                            )
                                         ),
                                       )
                                     ),
-                                  ),
+                                  ) : SizedBox(),
                                   SizedBox(
                                     width: 6,
                                   ),
                                   SizedBox(
-                                    width: idealWidth * 160,
+                                    width: _diaryList![index].image_list.isNotEmpty ? idealWidth * 160 : idealWidth * 320,
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text(itemList[index]["date"], style: TextStyle(fontWeight: FontWeight.bold),),
-                                        Text(itemList[index]["detail"]),
+                                        Text(
+                                          "${DateFormat("yyyy년 MM월 dd일").format(_diaryList![index].date.toDate())} (${koreanDateFormat.format(_diaryList![index].date.toDate())})",
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(_diaryList![index].content),
                                       ],
                                     ),
                                   )

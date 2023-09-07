@@ -74,6 +74,20 @@ class _CalendarMainState extends State<CalendarMain> {
     }
   }
 
+  Future<List<dynamic>> _getDiaryForTerm(DateTime startDate, DateTime endDate) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection("diary")
+        .orderBy("date", descending: true)
+        .where('date', isGreaterThanOrEqualTo: new DateTime(startDate.year, startDate.month, startDate.day))
+        .where('date', isLessThanOrEqualTo: new DateTime(endDate.year, endDate.month, endDate.day))
+        .get();
+
+    return [snapshot.docs
+        .map((e) => DiaryModel.fromFirestore(e.data()))
+        .toList(), snapshot.docs.length];
+  }
+
   // 날짜 필터
   Future<void> _showStartDatePicker() async {
     final picked = await showDatePicker(
@@ -197,12 +211,14 @@ class _CalendarMainState extends State<CalendarMain> {
                         child: Text(_endDate==null? "끝 날짜" :_endDate.toString().split(" ")[0]),
                       ),
                       ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if(_startDate!= null && _endDate!= null){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Calendar(
-                                startDate: _startDate.toString().split(" ")[0],
-                                endDate: _endDate.toString().split(" ")[0],
-                              )));
+                              await _getDiaryForTerm(_startDate!, _endDate!).then((data) => {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Calendar(
+                                  diaryList: data[0],
+                                  diaryNum: data[1],
+                                )))
+                              });
                             }
                           },
                           child: const Text("적용")
