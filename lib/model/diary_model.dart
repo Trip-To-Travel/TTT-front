@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DiaryModel {
   final String title;
   final String content;
-  final List<String> image_list;
-  final Map<String, String> user;
+  final List<dynamic> image_list;
+  final Map<String, dynamic> user;
   final Timestamp date;
 
   const DiaryModel({

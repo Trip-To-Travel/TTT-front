@@ -1,7 +1,10 @@
+import 'package:app/model/diary_model.dart';
 import 'package:app/screens/calendar/calendar.dart';
 import 'package:app/screens/diary/viewDiary.dart';
 import 'package:app/screens/diary/writeDiary.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarMain extends StatefulWidget {
@@ -16,42 +19,45 @@ class _CalendarMainState extends State<CalendarMain> {
   DateTime? _endDate;
 
   bool _showTodayButton = false;
+  DiaryModel? _selectedDiary = null;
 
 
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 
-  Map<String, String> _selectedDiary = {};
 
   @override
   void initState() {
+    final today = DateTime.now();
     super.initState();
-    _selectedDiary = _getDiaryForSelectedDate(_selectedDay);
+    _getDiary(today).then((value) => {
+      _selectedDiary = _getDiaryForSelectedDate(_selectedDay)
+  });
   }
 
-  List<Map> itemList = [
-    {
-      "image" : "assets/images/mockimg1.jpg",
-      "date" : "2023-07-01",
-      "title" : "내가 어쩌고 저쩌고",
-      "detail" : "내가 어쩌고 저쩌고",
-    },
-    {
-      "image" : "assets/images/mockimg2.jpg",
-      "date" : "2023-07-18",
-      "title" : "내가 어쩌고 저쩌고",
-      "detail" : "내가 어쩌고 저쩌고",
-    },
-    {
-      "image" : "assets/images/mockimg3.jpg",
-      "date" : "2023-07-20",
-      "title" : "내가 어쩌고 저쩌고",
-      "detail" : "내가 어쩌고 저쩌고",
-    },
-  ];
+  List<DiaryModel> _diaryList = [];
+
+  Future<void> _getDiary(DateTime targetDate, {bool isRefresh = false}) async {
+    if (isRefresh) {
+      _diaryList.clear();
+    }
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection("diary")
+        .orderBy("date", descending: true)
+        .where('date', isGreaterThanOrEqualTo: new DateTime(targetDate.year, targetDate.month, 1))
+        .where('date', isLessThanOrEqualTo: new DateTime(targetDate.year, targetDate.month+1, 0))
+        .get();
+    setState(() {
+      _diaryList = snapshot.docs
+          .map((e) => DiaryModel.fromFirestore(e.data()))
+          .toList();
+    });
+  }
+
 
   List<String> _getEventsForDay(DateTime day) {
-    final parseDate = itemList.where((item) => item["date"] == day.toString().split(" ")[0]);
+    final parseDate = _diaryList.where((item) => DateFormat('yy-MM-dd').format(item.date.toDate()) == DateFormat('yy-MM-dd').format(day));
     if (parseDate.isNotEmpty) {
       return ["true"];
     } else {
@@ -59,21 +65,16 @@ class _CalendarMainState extends State<CalendarMain> {
     }
   }
 
-  Map<String, String> _getDiaryForSelectedDate(DateTime selectedDate) {
-    final formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
-    final matchingItems = itemList.where((item) => item['date'] == formattedDate).toList();
-    if (matchingItems.isNotEmpty) {
-      return {
-        "image" : matchingItems[0]['image'],
-        "date" : matchingItems[0]['date'],
-        "title" : matchingItems[0]['title'],
-        "detail" : matchingItems[0]['detail']
-      };
+  DiaryModel? _getDiaryForSelectedDate(DateTime selectedDate) {
+    final List<DiaryModel> matchDiaryList = _diaryList.where((item) => DateFormat('yy-MM-dd').format(item.date.toDate()) == DateFormat('yy-MM-dd').format(selectedDate)).toList();
+    if(matchDiaryList.isEmpty){
+      return null;
     } else {
-      return {};
+      return matchDiaryList.first;
     }
   }
 
+  // 날짜 필터
   Future<void> _showStartDatePicker() async {
     final picked = await showDatePicker(
       context: context,
@@ -160,6 +161,7 @@ class _CalendarMainState extends State<CalendarMain> {
                       });
                     },
                     onPageChanged: (focusedDay) {
+                      _getDiary(focusedDay, isRefresh: true);
                       setState(() {
                         if(focusedDay.month == DateTime.now().month) {
                           _selectedDay = DateTime.now();
@@ -168,7 +170,6 @@ class _CalendarMainState extends State<CalendarMain> {
                           _selectedDay = focusedDay;
                           _focusedDay = focusedDay;
                         }
-
                         _selectedDiary = _getDiaryForSelectedDate(_selectedDay);
                         if (_focusedDay.toString().split(" ")[0] == DateTime.now().toString().split(" ")[0]) {
                           _showTodayButton = false;
@@ -210,7 +211,7 @@ class _CalendarMainState extends State<CalendarMain> {
                   ),
 
                   // 선택할때 다이어리 미리 보기 뜨는 곳.
-                  if (_selectedDiary.isNotEmpty)
+                  if (_selectedDiary != null)
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const ViewDiary()));},
@@ -235,8 +236,8 @@ class _CalendarMainState extends State<CalendarMain> {
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.asset(
-                                    _selectedDiary["image"]!= null ? _selectedDiary["image"] as String : "",
+                                  child: Image.network(
+                                    _selectedDiary!.image_list.first != null ? _selectedDiary!.image_list.first as String : "",
                                     fit: BoxFit.fill,
                                     width: idealWidth * 120,
                                     height: idealHeight * 120,
@@ -253,7 +254,7 @@ class _CalendarMainState extends State<CalendarMain> {
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Text(_selectedDiary["date"]!= null ? _selectedDiary["date"] as String : "",
+                                      Text(_selectedDiary!.date != null ? DateFormat('yy/MM/dd').format( _selectedDiary!.date.toDate()) as String : "",
                                         style: const TextStyle(
                                             fontSize: 12,
                                             color: Colors.grey
@@ -262,13 +263,13 @@ class _CalendarMainState extends State<CalendarMain> {
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Text(_selectedDiary["title"]!= null ? _selectedDiary["title"] as String : "default",
+                                      Text(_selectedDiary!.title != null ? _selectedDiary!.title as String : "default",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14
                                         ),
                                       ),
-                                      Text(_selectedDiary["detail"]!= null ? _selectedDiary["detail"] as String : "",
+                                      Text(_selectedDiary!.content != null ? _selectedDiary!.content as String : "",
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 3,
                                       ),
