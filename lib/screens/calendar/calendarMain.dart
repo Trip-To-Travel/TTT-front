@@ -37,10 +37,7 @@ class _CalendarMainState extends State<CalendarMain> {
 
   List<DiaryModel> _diaryList = [];
 
-  Future<void> _getDiary(DateTime targetDate, {bool isRefresh = false}) async {
-    if (isRefresh) {
-      _diaryList.clear();
-    }
+  Future<void> _getDiary(DateTime targetDate) async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
         .instance
         .collection("diary")
@@ -66,7 +63,9 @@ class _CalendarMainState extends State<CalendarMain> {
   }
 
   DiaryModel? _getDiaryForSelectedDate(DateTime selectedDate) {
+    print(_diaryList);
     final List<DiaryModel> matchDiaryList = _diaryList.where((item) => DateFormat('yy-MM-dd').format(item.date.toDate()) == DateFormat('yy-MM-dd').format(selectedDate)).toList();
+    print(selectedDate);
     if(matchDiaryList.isEmpty){
       return null;
     } else {
@@ -175,16 +174,12 @@ class _CalendarMainState extends State<CalendarMain> {
                       });
                     },
                     onPageChanged: (focusedDay) {
-                      _getDiary(focusedDay, isRefresh: true);
+                      _getDiary(focusedDay);
                       setState(() {
-                        if(focusedDay.month == DateTime.now().month) {
-                          _selectedDay = DateTime.now();
-                          _focusedDay = DateTime.now();
-                        } else {
-                          _selectedDay = focusedDay;
-                          _focusedDay = focusedDay;
-                        }
+                        _selectedDay = focusedDay;
+                        _focusedDay = focusedDay;
                         _selectedDiary = _getDiaryForSelectedDate(_selectedDay);
+                        print(_selectedDiary);
                         if (_focusedDay.toString().split(" ")[0] == DateTime.now().toString().split(" ")[0]) {
                           _showTodayButton = false;
                         } else if (_showTodayButton == false) {
@@ -316,11 +311,13 @@ class _CalendarMainState extends State<CalendarMain> {
                         fixedSize: MaterialStateProperty.all<Size>(const Size(85, 30)),
                       ),
                       onPressed: () {
+                        _getDiary(DateTime.now());
                         setState(() {
                           _showTodayButton = false;
                           _selectedDay = DateTime.now();
                           _focusedDay = DateTime.now();
                           _selectedDiary = _getDiaryForSelectedDate(DateTime.now());
+                          print(_selectedDiary);
                         });
                       },
                       child: Row(
