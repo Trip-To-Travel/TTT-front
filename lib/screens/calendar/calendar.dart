@@ -102,7 +102,7 @@ class _CalendarState extends State<Calendar> {
                           return SizedBox(
                             child: GestureDetector(
                               behavior: HitTestBehavior.translucent,
-                              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDiary()));},
+                              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDiary(selectedDate: DateTime.now())));},
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -42,6 +42,7 @@ class _WriteDiaryState extends State<WriteDiary> {
   void dispose() {
     _titleCon.dispose();
     _contentCon.dispose();
+    super.dispose();
   }
 
   String _getWeekDay(DateTime selectedDate) {

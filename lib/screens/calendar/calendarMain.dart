@@ -214,7 +214,7 @@ class _CalendarMainState extends State<CalendarMain> {
                   if (_selectedDiary != null)
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
-                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const ViewDiary()));},
+                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDiary(selectedDate: _selectedDiary!.date.toDate())));},
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(9, 5, 9, 0),
                         child: Container(
@@ -236,12 +236,12 @@ class _CalendarMainState extends State<CalendarMain> {
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(
+                                  child: _selectedDiary!.image_list.isNotEmpty ? Image.network(
                                     _selectedDiary!.image_list.first != null ? _selectedDiary!.image_list.first as String : "",
                                     fit: BoxFit.fill,
                                     width: idealWidth * 120,
                                     height: idealHeight * 120,
-                                  ),
+                                  ) : null,
                                 ),
                                 const SizedBox(
                                   width: 10,
