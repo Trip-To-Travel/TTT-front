@@ -105,7 +105,7 @@ class _ViewDiaryState extends State<ViewDiary> {
             SliverPadding(
               padding: EdgeInsets.fromLTRB(7, 3, 7, 11),
               sliver: SliverToBoxAdapter(
-                child: SizedBox(
+                child: _diary!.image_list.isNotEmpty ? SizedBox(
                   width: double.infinity,
                   height: deviceWidth - 50,
                   child: ListView.builder(
@@ -123,7 +123,7 @@ class _ViewDiaryState extends State<ViewDiary> {
                             ),
                             elevation: 5,
                             child: Image.network(
-                              _diary?.image_list[index],
+                              _diary!.image_list[index],
                               fit: BoxFit.fill,
                               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                 if (loadingProgress == null) {
@@ -139,7 +139,7 @@ class _ViewDiaryState extends State<ViewDiary> {
                       );
                     },
                   ),
-                ),
+                ) : null,
               ),
             )
           ]
