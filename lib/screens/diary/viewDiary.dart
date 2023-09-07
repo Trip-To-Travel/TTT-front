@@ -15,6 +15,8 @@ class ViewDiary extends StatefulWidget {
 class _ViewDiaryState extends State<ViewDiary> {
   DiaryModel? _diary = null;
   DateTime _targetDate = DateTime.now();
+
+  String? _docId;
   final koreanDateFormat = DateFormat('E', 'ko_KR');
 
   Future<void> _getDiary(DateTime targetDate) async {
@@ -28,6 +30,7 @@ class _ViewDiaryState extends State<ViewDiary> {
     setState(() {
       if(snapshot.docs.isNotEmpty) {
         _diary = snapshot.docs.map((e) => DiaryModel.fromFirestore(e.data())).first;
+        _docId = snapshot.docs[0].id;
       }
     });
   }
@@ -65,7 +68,7 @@ class _ViewDiaryState extends State<ViewDiary> {
         ),
         actions: [
           IconButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: DateTime.now(),)));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: _diary!.date.toDate(), modifyDiary: _diary, docId: _docId)));
           }, icon: Icon(Icons.edit_outlined))
         ],
       ) : null,

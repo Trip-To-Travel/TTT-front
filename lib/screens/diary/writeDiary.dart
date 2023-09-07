@@ -7,47 +7,55 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:native_exif/native_exif.dart';
 import 'package:uuid/uuid.dart';
 
 class WriteDiary extends StatefulWidget {
   final DateTime selectedDate;
+  final DiaryModel? modifyDiary;
+  final String? docId;
 
-  const WriteDiary({super.key, required this.selectedDate});
+  const WriteDiary({super.key, required this.selectedDate, required this.modifyDiary, required this.docId,});
 
   @override
   State<WriteDiary> createState() => _WriteDiaryState();
 }
 
 class _WriteDiaryState extends State<WriteDiary> {
-  final _titleCon = TextEditingController();
-  final _contentCon = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+  DiaryModel? _modifyDiary;
+  String? _docId;
+
+  TextEditingController _titleCon = TextEditingController();
+  TextEditingController _contentCon = TextEditingController();
+
+  final koreanDateFormat = DateFormat('E', 'ko_KR');
 
   final String colName = "diary";
   final String fnTitle = "title";
   final String fnContent = "content";
   final String fnDate = "date";
 
-  DateTime _selectedDate = DateTime.now();
-  List<File> _selectedImages = [];
+  List<File>? _selectedImages = [];
   bool _loading = false;
 
   @override
   void initState() {
     super.initState();
     _selectedDate = widget.selectedDate;
+    _modifyDiary = widget.modifyDiary;
+    _docId = widget.docId;
+    _selectedImages = (_modifyDiary != null ? null : []);
+    _titleCon = (_modifyDiary != null ? TextEditingController(text: _modifyDiary!.title) : TextEditingController());
+    _contentCon = (_modifyDiary != null ? TextEditingController(text: _modifyDiary!.content) : TextEditingController());
   }
 
   @override
   void dispose() {
-    _titleCon.dispose();
-    _contentCon.dispose();
+    _titleCon!.dispose();
+    _contentCon!.dispose();
     super.dispose();
-  }
-
-  String _getWeekDay(DateTime selectedDate) {
-    String weekday = ['월', '화', '수', '목', '금', '토', '일'][DateTime.now().weekday - 1];
-    return weekday;
   }
 
   Future<List<String>?> _imagePickerToUpload(List<File> _imgs) async {
@@ -64,6 +72,20 @@ class _WriteDiaryState extends State<WriteDiary> {
     } else {
       return null;
     }
+  }
+
+  Future<void> _updateFirestore(Map<String, dynamic> data) async {
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    await _firestore
+        .collection("diary")
+        .doc(_docId)
+        .update(DiaryModel(
+                  title: data['title'].toString(),
+                  content: data['content'].toString(),
+                  image_list: data['image_list'],
+                  user: data['user'],
+                  date: Timestamp.fromDate(data['date']),
+                ).toFirestore());
   }
 
   Future<void> _toFirestore(Map<String, dynamic> data) async {
@@ -168,21 +190,28 @@ class _WriteDiaryState extends State<WriteDiary> {
           },
           icon: Icon(Icons.close),
         ),
-        title: Text("${_selectedDate.toString().split(" ")[0]} (${_getWeekDay(_selectedDate)})", style: TextStyle(color: Colors.black, fontSize: 16),),
+        title: Text(
+          "${DateFormat('yyyy년 MM월 dd일').format(_selectedDate)} (${koreanDateFormat.format(_selectedDate)})",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           IconButton(onPressed: () async {
             setState(() {
               _loading = true;
             });
-            List<String>? imgs = await _imagePickerToUpload(_selectedImages);
-            if (imgs != null) {
-              await _toFirestore({
-                "title": _titleCon.text,
-                "content": _contentCon.text,
+            List<String>? imgs = _selectedImages != null ?  await _imagePickerToUpload(_selectedImages!) : null;
+              final data = {
+                "title": _titleCon!.text,
+                "content": _contentCon!.text,
                 "user": {"id": "user"},
-                "image_list": imgs,
-                "date": _selectedDate
-              }).then((value) => {
+                "image_list": (_docId != null && _selectedImages == null) ? _modifyDiary!.image_list : imgs,
+                "date": _selectedDate,
+              };
+              await (_docId != null ? _updateFirestore(data) : _toFirestore(data)).then((value) => {
                 showDialog(context: context, builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text("성공"),
@@ -202,7 +231,7 @@ class _WriteDiaryState extends State<WriteDiary> {
                   );
                 })
               });
-            }
+
           }, icon: Icon(Icons.check))
         ],
       ),
@@ -247,13 +276,28 @@ class _WriteDiaryState extends State<WriteDiary> {
               ),
               if (_loading)
                 const CircularProgressIndicator(),
+              _modifyDiary != null && _selectedImages == null ? Expanded(
+                child: GridView.count(
+                  crossAxisCount: 1,
+                  children: List.generate(_modifyDiary!.image_list.length, (index) {
+                    return SizedBox(
+                      child: Image.network(
+                        _modifyDiary!.image_list[index].toString(),
+                        fit: BoxFit.cover,
+                        width: 100.0,
+                        height: 100.0,
+                      ),
+                    );
+                  }),
+                ),
+              ) :
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 1,
-                  children: List.generate(_selectedImages.length, (index) {
+                  children: List.generate(_selectedImages!.length, (index) {
                     return SizedBox(
                       child: Image.file(
-                        _selectedImages[index],
+                        _selectedImages![index],
                         fit: BoxFit.cover,
                         width: 100.0,
                         height: 100.0,

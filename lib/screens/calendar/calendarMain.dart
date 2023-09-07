@@ -337,7 +337,7 @@ class _CalendarMainState extends State<CalendarMain> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: _selectedDay,)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => WriteDiary(selectedDate: _selectedDay, modifyDiary: null, docId: null,)));
         },
         backgroundColor: const Color(0xff76BDFF),
         shape: const RoundedRectangleBorder(
