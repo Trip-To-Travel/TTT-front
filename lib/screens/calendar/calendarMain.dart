@@ -214,7 +214,11 @@ class _CalendarMainState extends State<CalendarMain> {
                           onPressed: () async {
                             if(_startDate!= null && _endDate!= null){
                               await _getDiaryForTerm(_startDate!, _endDate!).then((data) => {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Calendar(
+                                  setState(() {
+                                    _startDate = null;
+                                    _endDate = null;
+                                  }),
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => Calendar(
                                   diaryList: data[0],
                                   diaryNum: data[1],
                                 )))
