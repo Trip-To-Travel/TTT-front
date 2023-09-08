@@ -1,4 +1,5 @@
 import 'package:app/model/diary_model.dart';
+import 'package:app/screens/calendar/calendarMain.dart';
 import 'package:app/screens/diary/writeDiary.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -148,6 +149,44 @@ class _ViewDiaryState extends State<ViewDiary> {
           ]
         ),
       ) : null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('알림'),
+                content: Text('다이어리를 삭제하시겠습니까?'),
+                actions: [
+                  TextButton(
+                    onPressed: ()  {
+                      Navigator.pop(context);
+                    },
+                    child: Text('아니요'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                      await _firestore.collection("diary").doc(_docId).delete();
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CalendarMain())
+                      );
+                    },
+                    child: Text('예'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(50.0))
+        ),
+        child: const Icon(Icons.delete_forever_outlined, color: Colors.black,),
+      ),
     );
   }
 }
