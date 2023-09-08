@@ -3,11 +3,15 @@ import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await initializeDateFormatting();
+
+  AuthRepository.initialize(appKey: '340361c9386de339160c50eca11921f4');
+
   runApp(const MyApp());
 }
 
